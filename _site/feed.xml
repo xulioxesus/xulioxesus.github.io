@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-02T01:13:00+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Instalar Oracle 11g Server en Windows 2008</title><link href="http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008.html" rel="alternate" type="text/html" title="Instalar Oracle 11g Server en Windows 2008" /><published>2020-10-01T22:46:09+02:00</published><updated>2020-10-01T22:46:09+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008.html">&lt;p&gt;El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 2008 de 64 bits.&lt;/p&gt;
+
+&lt;p&gt;Después de importarla se debería ver como la siguiente imagen.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A continuación hay que descargar los dos archivos .zip con el Oracle Database 11g Release 2. Descomprime ambos archivos en el Escritorio para que quede así:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/2.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lanza el archivo setup.exe para comenzar con la instalación.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;No proporciones ningún dato en esta pantalla e ignora el mensaje de advertencia.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Selecciona la primera opción para que después de instalar el software de Oracle se configure una base de datos.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Elige la opción “Clase de Escritorio” puesto que no vamos a trabajar en producción.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/6.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En este punto lo único que vamos a completar es el “Nombre de la Base de Datos Global”. Rellénalo con “orcl.w2008”. Como contraseña de Administrador y su confirmación pon “system”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ignora el mensaje de advertencia y avanza en la instalación.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Esta pantalla informativa nos sirve para poder revisar que las opciones de instalación son correctas. Presiona “Terminar” para comenzar el proceso de instalación.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/9.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En este punto comienza el proceso de instalación…&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/10.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Al terminar, el “Asistente de Configuración de Bases de Datos” nos crea la instancia que habíamos configurado previamente.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/11.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Cuando el asistente termina, presionamos “Gestión de Contraseñas…” para editar y desbloquear unos cuantos usuarios.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/12.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Cambiamos la contraseña del usuario “SYS” y del usuario “SYSTEM”. En ambos casos ponemos como contraseña “system”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/13.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Desbloqueamos el usuario “SCOTT” y el usuario “HR”.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;SCOTT: contraseña “tiger”.&lt;/li&gt;
+  &lt;li&gt;HR: contraseña “hr”.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/14.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ignoramos la advertencia sobre la seguridad de las contraseñas.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/15.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos “Aceptar” y habremos finalizado la instalación.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/16.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En esta última pantalla vemos la url que debemos poner en el navegador para poder adminsitrar la base de datos creada (orcl).&lt;/p&gt;
+
+&lt;p&gt;La dirección es: https://localhost:1154/em&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/17.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Abrimos Firefox y habilitamos TLS 1.0 y 1.1.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/18.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos “Avanzado…” porque vamos a añadir una excepción de seguridad.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/19.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos “Aceptar el riesgo y continuar” para poder llegar a la página de “Logon”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/20.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Rellenamos las credenciales del usuario “sys” y nos conectamos como “SYSDBA” para tener más privilegios de administración.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/21.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Una vez autenticados, podremos administrar la base de datos desde esta interfaz web.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/22.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nos podremos desconectar utilizando el enlace de la parte superior derecha de la página.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_oracle_instalacion/23.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 2008 de 64 bits.</summary></entry></feed>

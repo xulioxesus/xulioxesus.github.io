@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-03T19:49:22+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Abrir SQL Developer y corregir error</title><link href="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html" rel="alternate" type="text/html" title="Abrir SQL Developer y corregir error" /><published>2020-10-03T09:30:00+02:00</published><updated>2020-10-03T09:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html">&lt;h1 id=&quot;abrir-sql-developer&quot;&gt;Abrir SQL Developer&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-03T20:12:10+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">SQL Developer - Crear nueva conexión</title><link href="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html" rel="alternate" type="text/html" title="SQL Developer - Crear nueva conexión" /><published>2020-10-03T19:45:00+02:00</published><updated>2020-10-03T19:45:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html">&lt;h1 id=&quot;abrir-puertos-en-el-servidor&quot;&gt;Abrir puertos en el servidor&lt;/h1&gt;
+
+&lt;p&gt;Lo primero que se debe hacer es abrir los puertos adecuados en el servidor:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;1158&lt;/li&gt;
+  &lt;li&gt;1521&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/abrir_puertos.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Comprobamos que podemos acceder a la interfaz web del servidor desde el cliente.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Hay que utilizar el protocolo https.&lt;/li&gt;
+  &lt;li&gt;El puerto es el 1158&lt;/li&gt;
+  &lt;li&gt;Hay que aceptar las excepciones de seguridad pertinentes.&lt;/li&gt;
+  &lt;li&gt;En mi caso, la IP del servidor es 192.168.2.164&lt;/li&gt;
+  &lt;li&gt;La ruta completa para acceder es: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;https://192.168.2.164:1158/em&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;conexión-básica&quot;&gt;Conexión básica&lt;/h1&gt;
+
+&lt;p&gt;Vamos a crear una conexión básica desde SQL Developer&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
+&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Los parámetros necesarios en este caso son:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Nombre de la conexión: orcl.&lt;/li&gt;
+  &lt;li&gt;Usuario: scott.&lt;/li&gt;
+  &lt;li&gt;Contraseña: tiger.&lt;/li&gt;
+  &lt;li&gt;Tipo de conexión: Basic.&lt;/li&gt;
+  &lt;li&gt;Nombre del host: IP de tu servidor.&lt;/li&gt;
+  &lt;li&gt;Puerto: 1521 (ya está abierto en el servidor).&lt;/li&gt;
+  &lt;li&gt;Puerto: 1521 (ya está abierto en el servidor).&lt;/li&gt;
+  &lt;li&gt;SID: orcl&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Probar&lt;/code&gt; y nos conectamos.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/6.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Abrir puertos en el servidor</summary></entry><entry><title type="html">Abrir SQL Developer y corregir error</title><link href="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html" rel="alternate" type="text/html" title="Abrir SQL Developer y corregir error" /><published>2020-10-03T19:30:00+02:00</published><updated>2020-10-03T19:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html">&lt;h1 id=&quot;abrir-sql-developer&quot;&gt;Abrir SQL Developer&lt;/h1&gt;
 
 &lt;p&gt;Abrimos SQL Developer desde el menú principal de Windows.&lt;/p&gt;
 

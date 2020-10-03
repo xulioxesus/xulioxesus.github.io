@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Abrir SQL Developer y corregir error"
-date:   2020-10-03 09:30:00 +0200
+date:   2020-10-03 19:30:00 +0200
 categories: jekyll update
 ---
 # Abrir SQL Developer

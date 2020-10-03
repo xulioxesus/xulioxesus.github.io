@@ -1,4 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-02T01:13:00+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Instalar Oracle 11g Server en Windows 2008</title><link href="http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008.html" rel="alternate" type="text/html" title="Instalar Oracle 11g Server en Windows 2008" /><published>2020-10-01T22:46:09+02:00</published><updated>2020-10-01T22:46:09+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008.html">&lt;p&gt;El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 2008 de 64 bits.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-03T09:41:24+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Instalar Oracle 11g Client en Windows 7</title><link href="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html" rel="alternate" type="text/html" title="Instalar Oracle 11g Client en Windows 7" /><published>2020-10-03T09:30:00+02:00</published><updated>2020-10-03T09:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html">&lt;p&gt;El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 7 de 32 bits.&lt;/p&gt;
+
+&lt;p&gt;Después de importarla y copiar el archivo “win32_11gR2_client.zip” al Escritorio, se debería ver como la siguiente imagen.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Descomprime el archivo “win32_11gR2_client.zip” para obtener la carpeta “client”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/2.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lanza el archivo setup.exe para comenzar con la instalación.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Elige la opción de instalación “Runtime”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Añade “Spanish” a la lista de lenguajes seleccionados.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En este punto podemos visualizar el resumen de la instalación que se va a realizar.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/6.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Comienza la instalación…&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Permite el acceso en el firewall de Windows.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Si todo va bien nos debería decir que la instalación ha sido satisfactoria.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/9.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 7 de 32 bits.</summary></entry><entry><title type="html">Instalar Oracle 11g Server en Windows 2008</title><link href="http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008.html" rel="alternate" type="text/html" title="Instalar Oracle 11g Server en Windows 2008" /><published>2020-10-01T22:46:09+02:00</published><updated>2020-10-01T22:46:09+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/01/instalar-oracle-server-w2008.html">&lt;p&gt;El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 2008 de 64 bits.&lt;/p&gt;
 
 &lt;p&gt;Después de importarla se debería ver como la siguiente imagen.&lt;/p&gt;
 

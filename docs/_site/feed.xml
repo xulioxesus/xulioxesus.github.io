@@ -1,4 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-03T13:57:37+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Instalar Oracle 11g Client en Windows 7</title><link href="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html" rel="alternate" type="text/html" title="Instalar Oracle 11g Client en Windows 7" /><published>2020-10-03T09:30:00+02:00</published><updated>2020-10-03T09:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html">&lt;p&gt;El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 7 de 32 bits.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-03T19:49:22+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Abrir SQL Developer y corregir error</title><link href="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html" rel="alternate" type="text/html" title="Abrir SQL Developer y corregir error" /><published>2020-10-03T09:30:00+02:00</published><updated>2020-10-03T09:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html">&lt;h1 id=&quot;abrir-sql-developer&quot;&gt;Abrir SQL Developer&lt;/h1&gt;
+
+&lt;p&gt;Abrimos SQL Developer desde el menú principal de Windows.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Debemos indicarle la ubicación de “java”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/2.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En mi caso la ubicación está en el directorio:&lt;br /&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C:\app\alumno\product\11.2.0\client_1\jdk\bin&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Podemos marcar las extensiones de ficheros que abrirá por defecto SQL Developer.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En mi caso al abrirlo no hay forma de añadir una nueva conexión.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Además aparece un error..
+&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/error.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;corregir-error&quot;&gt;Corregir error&lt;/h1&gt;
+
+&lt;p&gt;Después de investigar un poco &lt;a href=&quot;https://community.oracle.com/tech/developers/discussion/874529/missing-connection-panel-version-1-5-4-5940&quot;&gt;aquí&lt;/a&gt;, damos con la solución.&lt;/p&gt;
+
+&lt;p&gt;Lo que tenemos que hacer es editar el fichero de configuración &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sqldeveloper.conf&lt;/code&gt; que en mi caso está en la ruta &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C:\app\alumno\product\11.2.0\client_1\sqldeveloper\sqldeveloper\bin&lt;/code&gt;. La edición se tiene que hacer como Administrador. Debemos añadir al final del fichero las siguientes líneas.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;AddVMOption -Duser.country=ES
+AddVMOption -Duser.territory=ES
+AddVMOption -Duser.language=es
+AddVMOption -Duser.timezone=+01:00
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
+&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Vuelve a arrancar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SQL Developer&lt;/code&gt; y listo.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Abrir SQL Developer</summary></entry><entry><title type="html">Instalar Oracle 11g Client en Windows 7</title><link href="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html" rel="alternate" type="text/html" title="Instalar Oracle 11g Client en Windows 7" /><published>2020-10-03T09:30:00+02:00</published><updated>2020-10-03T09:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html">&lt;p&gt;El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 7 de 32 bits.&lt;/p&gt;
 
 &lt;p&gt;Después de importarla y copiar el archivo “win32_11gR2_client.zip” al Escritorio, se debería ver como la siguiente imagen.&lt;/p&gt;
 

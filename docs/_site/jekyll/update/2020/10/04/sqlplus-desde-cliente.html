@@ -3,17 +3,19 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>ASGBD | Apuntes de Administración de sistemas gestores e bases de datos.</title>
+<title>Conectarse desde el cliente con SQL Plus | ASGBD</title>
 <meta name="generator" content="Jekyll v3.9.0" />
-<meta property="og:title" content="ASGBD" />
+<meta property="og:title" content="Conectarse desde el cliente con SQL Plus" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Apuntes de Administración de sistemas gestores e bases de datos." />
-<meta property="og:description" content="Apuntes de Administración de sistemas gestores e bases de datos." />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<meta name="description" content="Conexión desde el cliente" />
+<meta property="og:description" content="Conexión desde el cliente" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" />
 <meta property="og:site_name" content="ASGBD" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-04T12:20:00+02:00" />
 <script type="application/ld+json">
-{"@type":"WebSite","headline":"ASGBD","description":"Apuntes de Administración de sistemas gestores e bases de datos.","url":"http://localhost:4000/","name":"ASGBD","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","headline":"Conectarse desde el cliente con SQL Plus","dateModified":"2020-10-04T12:20:00+02:00","datePublished":"2020-10-04T12:20:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html"},"description":"Conexión desde el cliente","url":"http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ASGBD" /></head>
 <body><header class="site-header" role="banner">
@@ -33,41 +35,29 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
-<h2 class="post-list-heading">Posts</h2>
-    <ul class="post-list"><li><span class="post-meta">Oct 4, 2020</span>
-        <h3>
-          <a class="post-link" href="/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">
-            Conectarse desde el cliente con SQL Plus
-          </a>
-        </h3></li><li><span class="post-meta">Oct 4, 2020</span>
-        <h3>
-          <a class="post-link" href="/jekyll/update/2020/10/04/w2008-configurar-listener.html">
-            Configurar el listener en el servidor
-          </a>
-        </h3></li><li><span class="post-meta">Oct 3, 2020</span>
-        <h3>
-          <a class="post-link" href="/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html">
-            SQL Developer - Crear nueva conexión
-          </a>
-        </h3></li><li><span class="post-meta">Oct 3, 2020</span>
-        <h3>
-          <a class="post-link" href="/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html">
-            Abrir SQL Developer y corregir error
-          </a>
-        </h3></li><li><span class="post-meta">Oct 3, 2020</span>
-        <h3>
-          <a class="post-link" href="/jekyll/update/2020/10/03/instalar-oracle-client-w7.html">
-            Instalar Oracle 11g Client en Windows 7
-          </a>
-        </h3></li><li><span class="post-meta">Oct 1, 2020</span>
-        <h3>
-          <a class="post-link" href="/jekyll/update/2020/10/01/instalar-oracle-server-w2008.html">
-            Instalar Oracle 11g Server en Windows 2008
-          </a>
-        </h3></li></ul>
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-    <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p></div>
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Conectarse desde el cliente con SQL Plus</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-10-04T12:20:00+02:00" itemprop="datePublished">Oct 4, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="conexión-desde-el-cliente">Conexión desde el cliente</h1>
+
+<p>En user-name debemos poner <code class="language-plaintext highlighter-rouge">scott@"192.168.2.164/orcl.w2008"</code>.</p>
+<ul>
+  <li>Fíjate en las comillas dobles.</li>
+  <li>Utiliza la ip de tu servidor.</li>
+  <li>Pon el nombre del servicio tal y como lo hayas configurado <code class="language-plaintext highlighter-rouge">orcl.w2008</code>.</li>
+</ul>
+
+<p><img src="/assets/SQL_Plus_desde_cliente/1.png" alt="Máquina limpia" /></p>
+
+  </div><a class="u-url" href="/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" hidden></a>
+</article>
 
       </div>
     </main><footer class="site-footer h-card">

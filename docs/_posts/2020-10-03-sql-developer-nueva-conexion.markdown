@@ -43,3 +43,63 @@ Los parámetros necesarios en este caso son:
 Presionamos `Probar` y nos conectamos.
 
 ![Máquina limpia](/assets/SQL_developer_nueva_conexion/6.png)
+
+# Conexión TNS
+
+Abrimos el Asistente de Configuración de Red.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/7.png)
+
+Seleccionamos la tercera opción.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/8.png)
+
+Añadimos un nuevo nombre de servicio en red.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/9.png)
+
+Especificamos el mismo nombre del servicio que tenemos configurado en el servidor: `orcl.w2008`.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/10.png)
+
+Elegimos el tipo de protocolo.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/11.png)
+
+Escribimos la dirección IP de nuestro servidor y dejamos el puerto por defecto.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/12.png)
+
+Realizamos un test para comprobar que la conexión se realiza correctamente.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/13.png)
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/14.png)
+
+Le damos el nombre `orcl` al servicio.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/15.png)
+
+Y finalizamos el proceso.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/16.png)
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/17.png)
+
+## Crear nueva conexión con TNS
+
+Ahora podemos crear una nueva conexión utilizando la configuración que acabamos de generar.
+
+Abrimos SQL Developer y creamos una nueva conexión.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/18.png)
+
+Ponemos los datos del usuario scott y en Tipo de Conexión elegimos `TNS`. Probamos la conexión y listo.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/19.png)
+
+Ahora tenemos dos conexiones:
+* La primera utiliza el tipo de conexión básica.
+* La segunda utiliza la conexión de tipo TNS.
+
+![Máquina limpia](/assets/SQL_developer_nueva_conexion/20.png)
+
+

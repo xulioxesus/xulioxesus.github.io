@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T12:31:16+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T13:17:15+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
 
 &lt;p&gt;En user-name debemos poner &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott@&quot;192.168.2.164/orcl.w2008&quot;&lt;/code&gt;.&lt;/p&gt;
 &lt;ul&gt;
@@ -7,7 +7,76 @@
   &lt;li&gt;Pon el nombre del servicio tal y como lo hayas configurado &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;orcl.w2008&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_Plus_desde_cliente/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Conexión desde el cliente</summary></entry><entry><title type="html">Configurar el listener en el servidor</title><link href="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html" rel="alternate" type="text/html" title="Configurar el listener en el servidor" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html">&lt;h1 id=&quot;configurar-el-listener-en-el-servidor&quot;&gt;Configurar el listener en el servidor&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/SQL_Plus_desde_cliente/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Conexión desde el cliente</summary></entry><entry><title type="html">Parar e iniciar la base de datos</title><link href="http://localhost:4000/jekyll/update/2020/10/04/parar-e-iniciar.html" rel="alternate" type="text/html" title="Parar e iniciar la base de datos" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/parar-e-iniciar</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/parar-e-iniciar.html">&lt;h1 id=&quot;parar-la-base-de-datos&quot;&gt;Parar la base de datos&lt;/h1&gt;
+
+&lt;p&gt;Accedemos al Enterprise Manager con &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sys&lt;/code&gt; como &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SYSDBA&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En el apartado General presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cerrar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/2.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Debemos poner nuestras credenciales de Host:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Usuario: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Administrador&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Contraseña: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hola01&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Y las credenciales de Base de  Datos:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Usuario: sys&lt;/li&gt;
+  &lt;li&gt;Contraseña: system&lt;/li&gt;
+  &lt;li&gt;Conectar como: SYSDBA&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Vamos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Opciones Avanzadas&lt;/code&gt; para ver los modos en que podemos cerrar la base de datos.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Matenemos la opción de cierre inmediato y presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Confirmamos el cierre de la base de datos presionando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Sí&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nos informa de que la base de datos se está cerrando. Podemos presionar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Refrescar&lt;/code&gt; para ver si cambia el estado de la base de datos.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/6.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Pasado un tiempo podemos ver que la instancia de la base de datos está cerrada.&lt;/p&gt;
+
+&lt;h1 id=&quot;iniciar-la-base-de-datos&quot;&gt;Iniciar la base de datos&lt;/h1&gt;
+
+&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Iniciar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Tenemos que volver a rellenar las credenciales necesarias para poder iniciar la base de datos.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Sí&lt;/code&gt; para comenzar el proceso.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/9.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Esperamos a que se complete la operación.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/10.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nos conectamos a la instancia con las credenciales necesarias.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/11.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ya tenemos nuestra base de datos en marcha.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/12.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Parar la base de datos</summary></entry><entry><title type="html">Configurar el listener en el servidor</title><link href="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html" rel="alternate" type="text/html" title="Configurar el listener en el servidor" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html">&lt;h1 id=&quot;configurar-el-listener-en-el-servidor&quot;&gt;Configurar el listener en el servidor&lt;/h1&gt;
 
 &lt;p&gt;Para poder conectarnos desde el cliente, debemos configurar el listener para que acepte peticiones que vayan dirigidas a la propia IP del servidor.&lt;/p&gt;
 

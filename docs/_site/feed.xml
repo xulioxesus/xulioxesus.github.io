@@ -1,4 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T15:07:38+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T18:59:38+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Crear Tablespace - Práctica guiada 1</title><link href="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html" rel="alternate" type="text/html" title="Crear Tablespace - Práctica guiada 1" /><published>2020-10-04T18:30:00+02:00</published><updated>2020-10-04T18:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html">&lt;h1 id=&quot;crear-tablespace&quot;&gt;Crear Tablespace&lt;/h1&gt;
+
+&lt;p&gt;Desde el Enterprise Manager nos dirigimos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Servidor -&amp;gt; Almacenamiento -&amp;gt; Tablespaces&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/1.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Por defecto nos aparecen los tablespaces existentes. Pulsamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Crear&lt;/code&gt; para iniciar el proceso de creación de un nuevo tablespace.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/2.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Escribimos el nombre del nuevo tablespace &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TS1&lt;/code&gt;. El resto de opciones las dejamos por defecto. Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Agregar&lt;/code&gt; para crear un nuevo fichero asociado al tablespace.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/3.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Marcamos las siguientes opciones:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Nombre del Archivo: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TS1&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Tamaño del Archivo: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1MB&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Marcamos la casilla de verificación &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ampliar automáticamente ...&quot;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Incremento: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;512KB&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Tamaño máximo de Archivo: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5MB&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Continuar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/4.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt; para que las modificaciones sobre el fichero se hagan efectivas.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/5.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Obtenemos nuestro nuevo tablespace en la lista de tablespaces.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/6.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Crear Tablespace</summary></entry><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
 
 &lt;p&gt;En user-name debemos poner &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott@&quot;192.168.2.164/orcl.w2008&quot;&lt;/code&gt;.&lt;/p&gt;
 &lt;ul&gt;

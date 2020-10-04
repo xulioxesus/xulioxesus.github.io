@@ -1,4 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T11:21:08+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">SQL Developer - Crear nueva conexión</title><link href="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html" rel="alternate" type="text/html" title="SQL Developer - Crear nueva conexión" /><published>2020-10-03T19:45:00+02:00</published><updated>2020-10-03T19:45:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html">&lt;h1 id=&quot;abrir-puertos-en-el-servidor&quot;&gt;Abrir puertos en el servidor&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T11:37:52+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Configurar el listener en el servidor</title><link href="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html" rel="alternate" type="text/html" title="Configurar el listener en el servidor" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html">&lt;h1 id=&quot;configurar-el-listener-en-el-servidor&quot;&gt;Configurar el listener en el servidor&lt;/h1&gt;
+
+&lt;p&gt;Para poder conectarnos desde el cliente, debemos configurar el listener para que acepte peticiones que vayan dirigidas a la propia IP del servidor.&lt;/p&gt;
+
+&lt;p&gt;Hacemos esto conectándonos al Enterprise Manager con el usuario SYS. Desde la pantalla principal entramos en &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LISTENER_localhost&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/106.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Editamos el listener.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/107.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Agregamos una nueva dirección.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/108.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ponemos la IP del servidor y mantenemos el puerto por defecto.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/109.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ahora tenemos dos direcciones en el listener.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/110.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Confirmamos los cambios y listo.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/111.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Configurar el listener en el servidor</summary></entry><entry><title type="html">SQL Developer - Crear nueva conexión</title><link href="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html" rel="alternate" type="text/html" title="SQL Developer - Crear nueva conexión" /><published>2020-10-03T19:45:00+02:00</published><updated>2020-10-03T19:45:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html">&lt;h1 id=&quot;abrir-puertos-en-el-servidor&quot;&gt;Abrir puertos en el servidor&lt;/h1&gt;
 
 &lt;p&gt;Lo primero que se debe hacer es abrir los puertos adecuados en el servidor:&lt;/p&gt;
 &lt;ul&gt;

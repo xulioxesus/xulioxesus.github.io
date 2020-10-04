@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T18:59:38+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Crear Tablespace - Práctica guiada 1</title><link href="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html" rel="alternate" type="text/html" title="Crear Tablespace - Práctica guiada 1" /><published>2020-10-04T18:30:00+02:00</published><updated>2020-10-04T18:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html">&lt;h1 id=&quot;crear-tablespace&quot;&gt;Crear Tablespace&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T19:31:23+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Crear Tablespace - Práctica guiada 1</title><link href="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html" rel="alternate" type="text/html" title="Crear Tablespace - Práctica guiada 1" /><published>2020-10-04T18:30:00+02:00</published><updated>2020-10-04T18:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html">&lt;h1 id=&quot;crear-tablespace&quot;&gt;Crear Tablespace&lt;/h1&gt;
 
 &lt;p&gt;Desde el Enterprise Manager nos dirigimos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Servidor -&amp;gt; Almacenamiento -&amp;gt; Tablespaces&lt;/code&gt;.&lt;/p&gt;
 
@@ -31,7 +31,53 @@
 
 &lt;p&gt;Obtenemos nuestro nuevo tablespace en la lista de tablespaces.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/6.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Crear Tablespace</summary></entry><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/6.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Crear Tablespace</summary></entry><entry><title type="html">Gestión directa de objetos</title><link href="http://localhost:4000/jekyll/update/2020/10/04/gestion-directa.html" rel="alternate" type="text/html" title="Gestión directa de objetos" /><published>2020-10-04T18:30:00+02:00</published><updated>2020-10-04T18:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/gestion-directa</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/gestion-directa.html">&lt;h1 id=&quot;gestión-directa-de-objetos&quot;&gt;Gestión directa de objetos&lt;/h1&gt;
+
+&lt;p&gt;Desde el Enterprise Manager nos dirigimos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Esquema -&amp;gt; Objetos de la Base de Datos -&amp;gt; Tablas&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/1.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Para ver las tablas del esquema &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott&lt;/code&gt; introducimos el nombre y le damos al botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ir&lt;/code&gt;. De esta forma obtenemos la lista con las tablas.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/2.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Seleccionamos la tabla &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DEPT&lt;/code&gt; y presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ver&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/3.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ahora podemos elegir en la lista de &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Acciones&lt;/code&gt; la opción &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ver Datos&lt;/code&gt;. Debemos presionar el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ir&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/4.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Observamos las filas de la tabla seleccionada, así como el SQL asociado a la acción que acabamos de realizar.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/5.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;crear-una-secuencia&quot;&gt;Crear una secuencia&lt;/h1&gt;
+
+&lt;p&gt;Desde el Enterprise Manager nos dirigimos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Esquema -&amp;gt; Objetos de la Base de Datos -&amp;gt; Secuencias&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/6.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Seleccionamos el esquema &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/7.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Elegimos el nombre de la secuencia &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;S1&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;El valor máximo lo ponemos como ilimitado.&lt;/p&gt;
+
+&lt;p&gt;Elegimos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Mostrar SQL&lt;/code&gt; para ver el código que se va a ejecutar.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/8.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Volver&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/9.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/10.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Gestión directa de objetos</summary></entry><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
 
 &lt;p&gt;En user-name debemos poner &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott@&quot;192.168.2.164/orcl.w2008&quot;&lt;/code&gt;.&lt;/p&gt;
 &lt;ul&gt;

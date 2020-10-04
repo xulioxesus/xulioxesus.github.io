@@ -60,7 +60,7 @@ Pots pujar la imatge solta o en un document de text Word o OpenOffice (o LibreOf
 # Exercici 1.5
 
 Investiga els següents comandaments que es fan servir des de la consola o terminal:
-*tnsping
-*lsnrctl
+* tnsping
+* lsnrctl
 
 Fes-ne un resum de la seua utilitat i adjunta el resultat que mostren quan els executes en les teues màquines.

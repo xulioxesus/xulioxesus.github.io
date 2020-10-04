@@ -70,3 +70,44 @@ Nos conectamos a la instancia con las credenciales necesarias.
 Ya tenemos nuestra base de datos en marcha.
 
 ![Máquina limpia](/assets/parar_e_iniciar/12.png)
+
+# SGA y PGA
+
+Podemos consultar la memoria dedicada a SGA y a PGA desde `Servidor->Configuración de la Base de Datos->Asesores de Memoria`.
+
+![Máquina limpia](/assets/parar_e_iniciar/13.png)
+
+Pestaña SGA.
+
+![Máquina limpia](/assets/parar_e_iniciar/14.png)
+
+Pestaña PGA.
+
+![Máquina limpia](/assets/parar_e_iniciar/15.png)
+
+# Parámetros de inicialización
+
+Podemos consultar los parámetros de inicialización desde `Servidor->Configuración de la Base de Datos->Parámetros de incialización`.
+
+![Máquina limpia](/assets/parar_e_iniciar/13.png)
+![Máquina limpia](/assets/parar_e_iniciar/16.png)
+
+# Sesiones
+
+Para localizar las sesiones activas tenemos que hacerlo desde `Rendimiento->Sesiones de Búsqueda`.
+
+![Máquina limpia](/assets/parar_e_iniciar/17.png)
+
+
+Especificamos los criterios de búsqueda (SID) y presionamos `Ir`.
+
+![Máquina limpia](/assets/parar_e_iniciar/18.png)
+
+Nos aparecen las sesiones existentes.
+
+![Máquina limpia](/assets/parar_e_iniciar/19.png)
+
+Podríamos seleccionar la sesión de scott y `Matar Sesión`.
+
+![Máquina limpia](/assets/parar_e_iniciar/20.png)
+

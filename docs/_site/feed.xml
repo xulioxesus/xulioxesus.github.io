@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T13:17:15+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T14:32:57+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
 
 &lt;p&gt;En user-name debemos poner &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott@&quot;192.168.2.164/orcl.w2008&quot;&lt;/code&gt;.&lt;/p&gt;
 &lt;ul&gt;
@@ -76,7 +76,46 @@
 
 &lt;p&gt;Ya tenemos nuestra base de datos en marcha.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/12.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Parar la base de datos</summary></entry><entry><title type="html">Configurar el listener en el servidor</title><link href="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html" rel="alternate" type="text/html" title="Configurar el listener en el servidor" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html">&lt;h1 id=&quot;configurar-el-listener-en-el-servidor&quot;&gt;Configurar el listener en el servidor&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/12.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;sga-y-pga&quot;&gt;SGA y PGA&lt;/h1&gt;
+
+&lt;p&gt;Podemos consultar la memoria dedicada a SGA y a PGA desde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Servidor-&amp;gt;Configuración de la Base de Datos-&amp;gt;Asesores de Memoria&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/13.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Pestaña SGA.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/14.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Pestaña PGA.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/15.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;parámetros-de-inicialización&quot;&gt;Parámetros de inicialización&lt;/h1&gt;
+
+&lt;p&gt;Podemos consultar los parámetros de inicialización desde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Servidor-&amp;gt;Configuración de la Base de Datos-&amp;gt;Parámetros de incialización&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/13.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
+&lt;img src=&quot;/assets/parar_e_iniciar/16.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;sesiones&quot;&gt;Sesiones&lt;/h1&gt;
+
+&lt;p&gt;Para localizar las sesiones activas tenemos que hacerlo desde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rendimiento-&amp;gt;Sesiones de Búsqueda&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/17.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Especificamos los criterios de búsqueda (SID) y presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ir&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/18.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nos aparecen las sesiones existentes.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/19.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Podríamos seleccionar la sesión de scott y &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Matar Sesión&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/20.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Parar la base de datos</summary></entry><entry><title type="html">Configurar el listener en el servidor</title><link href="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html" rel="alternate" type="text/html" title="Configurar el listener en el servidor" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html">&lt;h1 id=&quot;configurar-el-listener-en-el-servidor&quot;&gt;Configurar el listener en el servidor&lt;/h1&gt;
 
 &lt;p&gt;Para poder conectarnos desde el cliente, debemos configurar el listener para que acepte peticiones que vayan dirigidas a la propia IP del servidor.&lt;/p&gt;
 

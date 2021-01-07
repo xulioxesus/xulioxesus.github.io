@@ -1,4 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-12T12:46:36+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Reconfigurar las contraseñas de los usuarios</title><link href="http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords.html" rel="alternate" type="text/html" title="Reconfigurar las contraseñas de los usuarios" /><published>2020-10-12T10:50:00+02:00</published><updated>2020-10-12T10:50:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords.html">&lt;h1 id=&quot;reconfigurar-las-contraseñas-de-los-usuarios&quot;&gt;Reconfigurar las contraseñas de los usuarios&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-07T22:09:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Mysql - Instalación en el servidor</title><link href="http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor.html" rel="alternate" type="text/html" title="Mysql - Instalación en el servidor" /><published>2021-01-07T20:12:00+01:00</published><updated>2021-01-07T20:12:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor.html">&lt;h1 id=&quot;instalación-de-lamp-en-ubuntu-server&quot;&gt;Instalación de LAMP en Ubuntu Server&lt;/h1&gt;
+
+&lt;p&gt;Descarga la ova de Ubuntu Server de la carpeta compartida: https://drive.google.com/drive/u/2/folders/1zqUSboN6vQjZA0vaHR0ILJL7OhMv-czd&lt;/p&gt;
+
+&lt;p&gt;Importa la máquina en Virtualbox y configura el adaptador de red como &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Adaptador puente&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Inicia la máquina y accede con el usuario &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vagrant&lt;/code&gt; contraseña &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vagrant&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Actualiza los repositorios:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo apt update&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Instala LAMP:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo apt-get install lamp-server^&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Podemos comprobar que apache está bien instalado visitando la dirección ip de nuestro servidor:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_servidor/apache.png&quot; alt=&quot;Apache&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;instalación-de-phpmyadmin&quot;&gt;Instalación de phpmyadmin&lt;/h1&gt;
+
+&lt;p&gt;Utiliza el comando:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo apt-get install phpmyadmin&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Selecciona apache2 como servidor web utilizando la barra espaciadora.&lt;/p&gt;
+
+&lt;p&gt;Selecciona que &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Sí&lt;/code&gt;cuando se pregunta si se quiere configurar una base de datos para phpmyadmin.&lt;/p&gt;
+
+&lt;p&gt;Elige como contraseña &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;phpmyadmin&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Podemos acceder a phpmyadmin utilizando la dirección adecuada desde un navegador:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_servidor/phpmyadmin.png&quot; alt=&quot;phpmyadmin&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;permisos-del-usuario-phpmyadmin-en-mysql&quot;&gt;Permisos del usuario phpmyadmin en mysql&lt;/h1&gt;
+
+&lt;p&gt;Para dar todos los permisos de administrador al usuario phpmyadmin debemos ejecutar los siguientes comandos.&lt;/p&gt;
+
+&lt;p&gt;Nos conectamos a mysql mediante:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo mysql -u root -p&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;La contraseña será &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vagrant&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Desde la consola de mysql ejecutamos:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;create user 'phpmyadmin'@'%' identified by 'phpmyadmin';&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Una vez creado el usuario phpmyadmin que se puede conectar desde cualquier host, le damos permisos sobre todos los objetos de mysql:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grant all privileges on *.* to 'phpmyadmin'@'%' with grant option;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_servidor/phpmyadmin2.png&quot; alt=&quot;phpmyadmin&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Instalación de LAMP en Ubuntu Server</summary></entry><entry><title type="html">Reconfigurar las contraseñas de los usuarios</title><link href="http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords.html" rel="alternate" type="text/html" title="Reconfigurar las contraseñas de los usuarios" /><published>2020-10-12T10:50:00+02:00</published><updated>2020-10-12T10:50:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords.html">&lt;h1 id=&quot;reconfigurar-las-contraseñas-de-los-usuarios&quot;&gt;Reconfigurar las contraseñas de los usuarios&lt;/h1&gt;
 
 &lt;p&gt;En el servidor.&lt;/p&gt;
 
@@ -465,40 +519,4 @@ AddVMOption -Duser.timezone=+01:00
 &lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
 &lt;img src=&quot;/assets/SQL_developer_y_corregir_error/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Vuelve a arrancar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SQL Developer&lt;/code&gt; y listo.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Abrir SQL Developer</summary></entry><entry><title type="html">Instalar Oracle 11g Client en Windows 7</title><link href="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html" rel="alternate" type="text/html" title="Instalar Oracle 11g Client en Windows 7" /><published>2020-10-03T09:30:00+02:00</published><updated>2020-10-03T09:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/instalar-oracle-client-w7.html">&lt;p&gt;El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 7 de 32 bits.&lt;/p&gt;
-
-&lt;p&gt;Después de importarla y copiar el archivo “win32_11gR2_client.zip” al Escritorio, se debería ver como la siguiente imagen.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Descomprime el archivo “win32_11gR2_client.zip” para obtener la carpeta “client”.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/2.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Lanza el archivo setup.exe para comenzar con la instalación.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Elige la opción de instalación “Runtime”.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Añade “Spanish” a la lista de lenguajes seleccionados.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;En este punto podemos visualizar el resumen de la instalación que se va a realizar.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/6.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Comienza la instalación…&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Permite el acceso en el firewall de Windows.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Si todo va bien nos debería decir que la instalación ha sido satisfactoria.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w7_oracle_instalacion/9.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">El primer paso es descargar la máquina virtual (OVA) del Drive de la asignatura. Se trata de un Windows Server 7 de 32 bits.</summary></entry></feed>
+&lt;p&gt;Vuelve a arrancar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SQL Developer&lt;/code&gt; y listo.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Abrir SQL Developer</summary></entry></feed>

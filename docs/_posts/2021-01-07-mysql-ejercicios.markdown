@@ -94,17 +94,17 @@ Crea un usuario (desde el entorno de trabajo que prefieras) con las siguientes c
  - Puede realizar todas las operaciones en la tabla instituts de la BD geo.
  - Puede realizar SELECT en las tablas comarques y poblacions.
 
- # Ejercicio 6.10
+# Ejercicio 6.10
  
  Desde la consola haz una copia de seguridad de la base de datos geo y recupéralaen la base de datos geo2.
  
  Adjunta el fichero de importación que has utilizado.
  
- # Ejercicio 6.11
+# Ejercicio 6.11
  
  ¿Cuál es el comando para exportar todas las bases de datos desde la consola?
  
- # Ejercicio 6.12
+# Ejercicio 6.12
  
  Desde phpmyadmin haz una copia de seguridad (en 2 pasos) de la bd geo.
  
@@ -117,7 +117,7 @@ Crea un usuario (desde el entorno de trabajo que prefieras) con las siguientes c
  
  En caso afirmativo indica los motivos y adjunta los ficheros de importación.
  
- # Ejercicio 6.13
+# Ejercicio 6.13
  
  Desde Workbench.
  

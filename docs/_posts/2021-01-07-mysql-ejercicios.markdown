@@ -60,13 +60,17 @@ Recuperar la contraseña de root.
 - Reinicia el servicio mysql: `sudo service mysql restart`
 - Conecta al servidor con el comando `sudo mysql -u root` (no te pedirá contraseña)
 - Ejecuta los siguientes comandos:
-    - mysql> use mysql;
+    - `mysql> use mysql;`
     - Si tu versión de MySQL es anterior a la 5.7
-`mysql> UPDATE user SET password='nuevacontraseña' WHERE user ='root';`
+        - `mysql> UPDATE user SET password='nuevacontraseña' WHERE user ='root';`
     - Si tu versión de MySQL es 5.7 o posterior
-`mysql> UPDATE user SET authentication_string=PASSWORD('nuevacontraseña')WHERE user ='root';`
-`mysql> flush privileges;`
-`mysql> quit`
+        - `mysql> UPDATE user SET authentication_string=PASSWORD('nuevacontraseña')WHERE user ='root';`
+        - `mysql> flush privileges;`
+        - `mysql> quit`
+    - Para la versión instalada en Ubuntu Server 20.04
+        - `mysql> flush privileges;`
+        - `mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'nuevacontraseña';`
+        - `mysql> exit`
 - Elimina la opción `skip-grant-tables` del fichero de configuración
 - Reinicia en servicio mysql
 - Comprueba que necesitas la 'nuevacontraseña' para conectar: `sudo mysql -u root -p`

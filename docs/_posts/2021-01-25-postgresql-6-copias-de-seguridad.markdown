@@ -64,13 +64,15 @@ En la imagen anterior puedes ver que el programa **pg_dumpall** pide 4 veces la 
 
 Muestra la ayuda con todas las opciones del programa
 
-	`pg_dumpall -?`
+	pg_dumpall -?
 
 ## Restauración del fichero generado con pg_dump
 
 Si el fichero de salida **no tiene ningún formato** (no hemos utilizado la opción -F), entonces lo ejecutaremos desde **psql** ya que son sentencias SQL. Desde fuera (sin entrar en psql) se puede hacer de dos maneras:
 
 	psql nombre_bd < fichero
+
+o
 
 	psql -f fichero nombre_bd
 
@@ -114,29 +116,29 @@ También podemos hacer copias de seguridad "en frío" copiando directamente los 
 
 Para ello tenemos que relizar las siguientes tareas:
 
-- Parar el servidor (de cualquiera de las formas vistas con anterioridad)
+Parar el servidor (de cualquiera de las formas vistas con anterioridad)
 
 	sudo service postgresql stop
 
-- Copiar todos los ficheros con la estructura de directorios
+Copiar todos los ficheros con la estructura de directorios
 
 	sudo tar -cf nombre_fichero_tar /var/lib/postgresql/12/main/data
 
-- Poner en marcha el servidor
+Poner en marcha el servidor
 
 	sudo service postgresql start
 
 La restauración será el proceso inverso:
 
-- Parar el servidor
+Parar el servidor
 
 	sudo service postgresql-10 stop
 
-- Restaurar los ficheros
+Restaurar los ficheros
 
 	sudo tar -xf nombre_fichero_tar -C /
 
-- Poner en marcha el servidor
+Poner en marcha el servidor
 
 	sudo service postgresql-10 start
 

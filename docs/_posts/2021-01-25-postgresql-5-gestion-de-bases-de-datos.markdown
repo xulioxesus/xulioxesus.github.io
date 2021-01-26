@@ -95,7 +95,7 @@ Crea una BD que se llame **geo2** igual que la base de datos **geo** y que utili
 
 Adjunta la sentencia SQL que se genera.
 
-### Ejercicio 7.11
+### Ejercicio 7.12
 
 Haz que el propietario de geo2 sea **usu1**.
 

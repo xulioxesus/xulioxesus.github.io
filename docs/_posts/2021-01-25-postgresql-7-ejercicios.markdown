@@ -91,8 +91,16 @@ Crea una BD que se llame **geo2** igual que la base de datos **geo** y que utili
 
 Adjunta la sentencia SQL que se genera.
 
-### Ejercicio 7.11
+### Ejercicio 7.12
 
 Haz que el propietario de geo2 sea **usu1**.
 
 Adjunta la sentencia SQL que se genera.
+
+### Ejercicio 7.13
+
+Crea una copia de seguridad de la estructura de la Base de Datos geo.  Utiliza esta copia de seguridad para restaurar o crear una nueva BD que se llame "geo_nueva"
+
+### Ejercicio 7.14
+
+Traspasa los datos de la tabla comarques de la BD geo a la tabla comarques de la BD geo_nueva.

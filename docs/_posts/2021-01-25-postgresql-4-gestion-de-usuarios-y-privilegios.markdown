@@ -191,7 +191,6 @@ usu1 y usu2.
 Desde psql ejecuta estas dos consultas:
 
 	SELECT * FROM pg_user;
-
 	SELECT * FROM pg_group;
 
 Ahora contensta a esta pregunta. ¿Qué información podemos obtener del campo **grolist**?

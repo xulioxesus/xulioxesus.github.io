@@ -68,7 +68,7 @@ Crea el grupo1 con las siguientes características:
 Adjunta la sentencia SQL de creación del grupo y las sentencias de modificación de los usuarios
 usu1 y usu2.
 
-## Ejercicio 7.8
+## Ejercicio 7.9
 
 Desde psql ejecuta estas dos consultas:
 
@@ -77,3 +77,22 @@ Desde psql ejecuta estas dos consultas:
 	SELECT * FROM pg_group;
 
 Ahora contensta a esta pregunta. ¿Qué información podemos obtener del campo **grolist**?
+
+### Ejercicio 7.10
+
+Crea un tablespace **nuevo** que se llame **prueba**. Adjunta la sentencia SQL.
+
+- En la ruta /var/lib/postgresql/12/main/data
+- Recuerda crear el directorio y cambiar el propietario y el grupo.
+
+### Ejercicio 7.11
+
+Crea una BD que se llame **geo2** igual que la base de datos **geo** y que utilice el tablespace del ejercicio anterior. El propietario tiene que ser **usu2**.
+
+Adjunta la sentencia SQL que se genera.
+
+### Ejercicio 7.11
+
+Haz que el propietario de geo2 sea **usu1**.
+
+Adjunta la sentencia SQL que se genera.

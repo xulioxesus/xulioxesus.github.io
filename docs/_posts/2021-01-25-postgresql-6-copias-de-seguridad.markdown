@@ -108,7 +108,7 @@ Hacer copias de seguridad desde pgAdmin es muy sencillo. Realmente estaremos eje
 
 A continuación tienes un vídeo donde puedes ver la creación de copias de seguridad y restauración desde pgAdmin.
 
-[https://youtu.be/YKCAuic0mD](https://youtu.be/YKCAuic0mD)
+[https://www.youtube.com/watch?v=YKCAuic0mD0](https://www.youtube.com/watch?v=YKCAuic0mD0)
 
 ## Copia de seguridad copiando directamente los ficheros
 

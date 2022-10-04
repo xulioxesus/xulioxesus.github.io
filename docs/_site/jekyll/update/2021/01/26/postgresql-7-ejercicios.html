@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>PostgreSQL - Ejercicios | ASGBD</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="PostgreSQL - Ejercicios" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias." />
+<meta property="og:description" content="Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-7-ejercicios.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2021/01/26/postgresql-7-ejercicios.html" />
+<meta property="og:site_name" content="ASGBD" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-26T06:15:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-7-ejercicios.html","headline":"PostgreSQL - Ejercicios","dateModified":"2021-01-26T06:15:00+01:00","datePublished":"2021-01-26T06:15:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-7-ejercicios.html"},"description":"Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ASGBD" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ASGBD</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PostgreSQL - Ejercicios</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-01-26T06:15:00+01:00" itemprop="datePublished">Jan 26, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.</p>
+
+<h2 id="ejercicio-71">Ejercicio 7.1</h2>
+
+<p>Averigua cuántas <strong>poblacions</strong> están situadas a más de 700 metros de altura.</p>
+
+<h2 id="ejercicio-72">Ejercicio 7.2</h2>
+
+<p>Desde <strong>psql</strong> conecta con el usuario <strong>postgres</strong>. Luego utiliza los comandos</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\c
+</code></pre></div></div>
+
+<p>y</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\conninfo
+</code></pre></div></div>
+
+<p>para cambiar de usuario y conectarte a la base de datos <strong>geo</strong> con el usuario <strong>geo</strong>.</p>
+
+<h2 id="ejercicio-73">Ejercicio 7.3</h2>
+
+<p>Desde <strong>psql</strong> podemos utilizar el comando <strong>\copy</strong> para guardar el resultado de una consulta en un fichero. Aquí tienes dos ejemplos:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\copy (select * from comarques) TO /tmp/prueba.txt;
+\copy (select * from comarques) TO /tmp/prueba.csv WITH CSV DELIMITER ';';
+</code></pre></div></div>
+
+<p>Guarda el resultado del ejercicio 7.1 en un fichero y comprueba que el fichero se ha generado de forma correcta.</p>
+
+<h2 id="ejercicio-74">Ejercicio 7.4</h2>
+
+<p>Modifica el fichero <strong>pg_hba.conf</strong> para permitir conectar con el usuario <strong>postgres</strong> desde el equipo cliente a cualquier base de datos.</p>
+
+<h2 id="ejercicio-75">Ejercicio 7.5</h2>
+
+<p>Modifica el fichero <strong>pg_hba.conf</strong> para permitir conectar con el usuario <strong>geo</strong> desde cualquier IP de la red local a la base de datos <strong>geo</strong>.</p>
+
+<h2 id="ejercicio-76">Ejercicio 7.6</h2>
+
+<p>Desde el cliente abre una conexión con <strong>geo</strong>. Ahora desde el servidor intenta parar la Base de Datos utilizando el script <strong>pg_ctl</strong> con la opción <strong>s</strong>. Observa el resultado. Si has podido parar la Base de Datos recuerda ponerla en marcha con cualquiera de los métodos vistos en los apuntes.</p>
+
+<h2 id="ejercicio-77">Ejercicio 7.7</h2>
+
+<p>Crea 3 usuarios (usu1, usu2 y usu3) con las siguientes características:</p>
+
+<ul>
+  <li>La cuenta caduca el 31 de diciembre de este año.</li>
+  <li>Límite de conexiones 5</li>
+  <li>Puede crear roles</li>
+  <li>El resto de parámetros tomará los valores por defecto.</li>
+</ul>
+
+<p>Adjunta la sentencia SQL de creación de uno de los usuarios anteriores.</p>
+
+<h2 id="ejercicio-78">Ejercicio 7.8</h2>
+
+<p>Crea el grupo1 con las siguientes características:</p>
+
+<ul>
+  <li>Puede crear Bases de Datos</li>
+  <li>Puede crear Triggers en la tabla comarques (de la BD geo)</li>
+  <li>Puede consultar y añadir datos en la tabla instituts(no modificar ni eliminar).</li>
+  <li>Puede otorgar sus permisos de la tabla instituts a otros usuarios.</li>
+  <li>Haz que usu1 y usu2 sean miembros de este grupo.</li>
+</ul>
+
+<p>Adjunta la sentencia SQL de creación del grupo y las sentencias de modificación de los usuarios
+usu1 y usu2.</p>
+
+<h2 id="ejercicio-79">Ejercicio 7.9</h2>
+
+<p>Desde psql ejecuta estas dos consultas:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT * FROM pg_user;
+
+SELECT * FROM pg_group;
+</code></pre></div></div>
+
+<p>Ahora contensta a esta pregunta. ¿Qué información podemos obtener del campo <strong>grolist</strong>?</p>
+
+<h3 id="ejercicio-710">Ejercicio 7.10</h3>
+
+<p>Crea un tablespace <strong>nuevo</strong> que se llame <strong>prueba</strong>. Adjunta la sentencia SQL.</p>
+
+<ul>
+  <li>En la ruta /var/lib/postgresql/12/main/data</li>
+  <li>Recuerda crear el directorio y cambiar el propietario y el grupo.</li>
+</ul>
+
+<h3 id="ejercicio-711">Ejercicio 7.11</h3>
+
+<p>Crea una BD que se llame <strong>geo2</strong> igual que la base de datos <strong>geo</strong> y que utilice el tablespace del ejercicio anterior. El propietario tiene que ser <strong>usu2</strong>.</p>
+
+<p>Adjunta la sentencia SQL que se genera.</p>
+
+<h3 id="ejercicio-712">Ejercicio 7.12</h3>
+
+<p>Haz que el propietario de geo2 sea <strong>usu1</strong>.</p>
+
+<p>Adjunta la sentencia SQL que se genera.</p>
+
+<h3 id="ejercicio-713">Ejercicio 7.13</h3>
+
+<p>Crea una copia de seguridad de la estructura de la Base de Datos geo.  Utiliza esta copia de seguridad para restaurar o crear una nueva BD que se llame “geo_nueva”</p>
+
+<h3 id="ejercicio-714">Ejercicio 7.14</h3>
+
+<p>Traspasa los datos de la tabla comarques de la BD geo a la tabla comarques de la BD geo_nueva.</p>
+
+  </div><a class="u-url" href="/jekyll/update/2021/01/26/postgresql-7-ejercicios.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">ASGBD</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">ASGBD</li><li><a class="u-email" href="mailto:xulioxesus@gmail.com">xulioxesus@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">xulioxesus</span></a></li><li><a href="https://www.twitter.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">xulioxesus</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Apuntes de Administración de sistemas gestores e bases de datos.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

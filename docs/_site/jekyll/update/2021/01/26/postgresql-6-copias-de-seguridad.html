@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>PostgreSQL - Copias de seguridad | ASGBD</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="PostgreSQL - Copias de seguridad" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tema 7 - PostgreSQL - Copias de seguridad" />
+<meta property="og:description" content="Tema 7 - PostgreSQL - Copias de seguridad" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad.html" />
+<meta property="og:site_name" content="ASGBD" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-26T09:25:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad.html","headline":"PostgreSQL - Copias de seguridad","dateModified":"2021-01-26T09:25:00+01:00","datePublished":"2021-01-26T09:25:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad.html"},"description":"Tema 7 - PostgreSQL - Copias de seguridad","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ASGBD" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ASGBD</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PostgreSQL - Copias de seguridad</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-01-26T09:25:00+01:00" itemprop="datePublished">Jan 26, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="tema-7---postgresql---copias-de-seguridad">Tema 7 - PostgreSQL - Copias de seguridad</h1>
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Esta tarea tan fundamental del DBA es muy sencilla de hacer en Postgres y se puede planificar con un script que se ejecute periódicamente.</p>
+
+<p>Se puede decir que existen tres formas de hacer el backup:</p>
+
+<ul>
+  <li>Con el programa <strong>pg_dump</strong></li>
+  <li>De forma gráfica con <strong>PgAdmin</strong></li>
+  <li>Copiando directamente los ficheros</li>
+</ul>
+
+<p>También existe la posibilidad de realizar un <strong>PITR (Point in Time Recovery)</strong> que consiste en la recuperación del sistema hasta un momento concreto (parecido a la recuperación de Oracle en el modo ARCHIVELOG).  Para poder hacer una recuperación en el tiempo, es necesario que Postgres guarde todos los cambios que se realicen en el sistema en unos ficheros llamados <strong>WAL</strong> (Write Ahead Log - información sobre las transacciones realizadas). Este tipo de recuperación es muy avanzada y no la vamos a ver en
+este curso.</p>
+
+<h2 id="copia-de-seguridad-con-pg_dump">Copia de seguridad con pg_dump</h2>
+
+<p>Básicamente consiste en generar un fichero de texto con las consultas SQL necesarias para rehacer la Base de Datos tal y como estaba en el momento de ejecutar el <strong>pg_dump</strong>.</p>
+
+<p>El programa <strong>pg_dump</strong> se encuentra en la misma ruta ( <strong>/usr/lib/postgresql/12/bin</strong> ) que el resto de programas de postgres y sus opciones principales son las siguientes:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-a</code>, sólo guarda los datos</li>
+  <li><code class="language-plaintext highlighter-rouge">-s</code>, Sólo guarda la estructura</li>
+  <li><code class="language-plaintext highlighter-rouge">--inserts</code>, utiliza la sentencia INSERT para los datos (sino utilizará COPY)</li>
+  <li><code class="language-plaintext highlighter-rouge">--column-inserts</code>, incluye los nombres de las columnas en las sentencias</li>
+  <li><code class="language-plaintext highlighter-rouge">-f fichero</code>, envía el resultado a un fichero</li>
+  <li><code class="language-plaintext highlighter-rouge">-F formato</code>, indica el formato de salida ( c custom, d directory, t tar, p plain text)</li>
+  <li><code class="language-plaintext highlighter-rouge">-n nombreBD</code>, sólo copia la BD especificada</li>
+  <li><code class="language-plaintext highlighter-rouge">-t</code>, nombreTabla Sólo copia la tabla especificada</li>
+  <li><code class="language-plaintext highlighter-rouge">--help</code>, muestra la ayuda con todas las opciones (igual que -? )</li>
+</ul>
+
+<p>Además, también tenemos las habituales opciones de conexión: <strong>-h</strong> (host), <strong>-p</strong> (puerto), <strong>-U</strong> usuario y <strong>-W</strong>.</p>
+
+<p>A continuación tienes algunos ejemplos de uso del programa pg_dump:</p>
+
+<p>Se conecta con el usuario geo y hace una copia de seguridad de toda la base de datos geo. La guarda en el fichero geo.sql</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_dump -U geo &gt; geo.sql
+</code></pre></div></div>
+
+<p>Esta vez sólo copia la estructura de la base de datos geo.
+	pg_dump -s -U geo &gt; geo.sql</p>
+
+<p>Sólo copia los datos utilizando sentencias INSERT</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_dump -a --inserts -U geo &gt; geo.sql
+</code></pre></div></div>
+
+<p>Sólo copia la estructura de las tablas comarques e instituts.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_dump -s -t comarques -t instituts -U geo &gt; geo.sql
+</code></pre></div></div>
+
+<p>Si no tenemos suficientes permisos para crear archivos en el directorio donde nos encontramos nos mostrará el error “Permiso denegado”.</p>
+
+<p>Una variante de pg_dump es <strong>pd_dumpall</strong> que hace la copia de seguridad de <strong>todas las BD</strong> del sistema. Este programa habrá que ejecutarlo como postgres para tener acceso a todas las BD. También guarda otros objetos que no pertenecen a ninguna BD como son los usuarios y los grupos.El inconveniente es que hay que introducir la contraseña del usuario postgres tantas veces como BD haya en el sistema.</p>
+
+<p>En la imagen anterior puedes ver que el programa <strong>pg_dumpall</strong> pide 4 veces la contraseña porque existen 4 BD en el sistema.</p>
+
+<p>Muestra la ayuda con todas las opciones del programa</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_dumpall -?
+</code></pre></div></div>
+
+<h2 id="restauración-del-fichero-generado-con-pg_dump">Restauración del fichero generado con pg_dump</h2>
+
+<p>Si el fichero de salida <strong>no tiene ningún formato</strong> (no hemos utilizado la opción -F), entonces lo ejecutaremos desde <strong>psql</strong> ya que son sentencias SQL. Desde fuera (sin entrar en psql) se puede hacer de dos maneras:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psql nombre_bd &lt; fichero
+</code></pre></div></div>
+
+<p>o</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psql -f fichero nombre_bd
+</code></pre></div></div>
+
+<p>También se puede hacer desde dentro de psql con la opción \i fichero</p>
+
+<p>Para que este tipo de restauración funcione tanto la Base de Datos como el usuario deben existir.</p>
+
+<p>Combinando el programa pg_dump con psql se puede “pasar” la información de una BD a otra:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_dump bd1 | psql bd
+</code></pre></div></div>
+
+<p>o incluso a otra BD que esté en otro servidor</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_dump bd1 | psql -h host bd
+</code></pre></div></div>
+
+<p>Si el fichero de salida <strong>tenía algún formato</strong> (porque hemos utilizado la opción -F), entonces la restauración se realizará con el programa pg_restore.</p>
+
+<p>Las principales opciones de pg_restore son:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-a</code>, sólo restaura los datos</li>
+  <li><code class="language-plaintext highlighter-rouge">-s</code>, sólo restaura la estructura</li>
+  <li><code class="language-plaintext highlighter-rouge">-c</code>, borra los objetos antes de rellenarlos</li>
+  <li><code class="language-plaintext highlighter-rouge">-C</code>, crea la BD antes de restaurarla</li>
+  <li><code class="language-plaintext highlighter-rouge">-d</code>, nombreBD Se conecta a la BD y restaura directamente en ella</li>
+  <li><code class="language-plaintext highlighter-rouge">-F</code>, formato Indica el formato del fichero de entrada</li>
+  <li><code class="language-plaintext highlighter-rouge">-t</code>, nombretabla Restaura la tabla especificada</li>
+</ul>
+
+<p>Además, también tenemos las habituales opciones de conexión: <strong>-h</strong> (host), <strong>-p</strong> (puerto), <strong>-U</strong> usuario y <strong>-W</strong>.</p>
+
+<h2 id="copia-de-seguridad-desde-pgadmin">Copia de seguridad desde pgAdmin</h2>
+
+<p>Hacer copias de seguridad desde pgAdmin es muy sencillo. Realmente estaremos ejecutando <strong>pg_dump</strong> pero desde un entorno gráfico, sin necesidad de conocer la sintaxix de todas las opciones que nos ofrece pg-dump.</p>
+
+<p>A continuación tienes un vídeo donde puedes ver la creación de copias de seguridad y restauración desde pgAdmin.</p>
+
+<p><a href="https://www.youtube.com/watch?v=YKCAuic0mD0">https://www.youtube.com/watch?v=YKCAuic0mD0</a></p>
+
+<h2 id="copia-de-seguridad-copiando-directamente-los-ficheros">Copia de seguridad copiando directamente los ficheros</h2>
+
+<p>También podemos hacer copias de seguridad “en frío” copiando directamente los ficheros del servidor.</p>
+
+<p>Para ello tenemos que relizar las siguientes tareas:</p>
+
+<p>Parar el servidor (de cualquiera de las formas vistas con anterioridad)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql stop
+</code></pre></div></div>
+
+<p>Copiar todos los ficheros con la estructura de directorios</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo tar -cf nombre_fichero_tar /var/lib/postgresql/12/main/data
+</code></pre></div></div>
+
+<p>Poner en marcha el servidor</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql start
+</code></pre></div></div>
+
+<p>La restauración será el proceso inverso:</p>
+
+<p>Parar el servidor</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql-10 stop
+</code></pre></div></div>
+
+<p>Restaurar los ficheros</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo tar -xf nombre_fichero_tar -C /
+</code></pre></div></div>
+
+<p>Poner en marcha el servidor</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql-10 start
+</code></pre></div></div>
+
+<h2 id="ejercicios">Ejercicios</h2>
+
+<p>Los siguientes ejercicios se pueden realizar de varias formas. Elige una y adjunta las capturas de
+pantalla necesarias.</p>
+
+<h3 id="ejercicio-713">Ejercicio 7.13</h3>
+
+<p>Crea una copia de seguridad de la estructura de la Base de Datos geo.  Utiliza esta copia de seguridad para restaurar o crear una nueva BD que se llame “geo_nueva”</p>
+
+<h3 id="ejercicio-714">Ejercicio 7.14</h3>
+
+<p>Traspasa los datos de la tabla comarques de la BD geo a la tabla comarques de la BD geo_nueva.</p>
+
+  </div><a class="u-url" href="/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">ASGBD</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">ASGBD</li><li><a class="u-email" href="mailto:xulioxesus@gmail.com">xulioxesus@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">xulioxesus</span></a></li><li><a href="https://www.twitter.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">xulioxesus</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Apuntes de Administración de sistemas gestores e bases de datos.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -74,7 +74,7 @@ Presionamos "Aceptar" y habremos finalizado la instalación.
 
 En esta última pantalla vemos la url que debemos poner en el navegador para poder adminsitrar la base de datos creada (orcl).
 
-La dirección es: https://localhost:1154/em
+La dirección es: https://localhost:1158/em
 
 ![Máquina limpia](/assets/w2008_oracle_instalacion/17.png)
 

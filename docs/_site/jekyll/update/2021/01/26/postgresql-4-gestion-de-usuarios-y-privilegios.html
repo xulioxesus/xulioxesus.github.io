@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>PostgreSQL - Gestión de usuarios y privilegios | ASGBD</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="PostgreSQL - Gestión de usuarios y privilegios" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tema 7 - PostgreSQL - Gestión de usuarios y privilegios" />
+<meta property="og:description" content="Tema 7 - PostgreSQL - Gestión de usuarios y privilegios" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios.html" />
+<meta property="og:site_name" content="ASGBD" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-26T07:45:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios.html","headline":"PostgreSQL - Gestión de usuarios y privilegios","dateModified":"2021-01-26T07:45:00+01:00","datePublished":"2021-01-26T07:45:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios.html"},"description":"Tema 7 - PostgreSQL - Gestión de usuarios y privilegios","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ASGBD" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ASGBD</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PostgreSQL - Gestión de usuarios y privilegios</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-01-26T07:45:00+01:00" itemprop="datePublished">Jan 26, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="tema-7---postgresql---gestión-de-usuarios-y-privilegios">Tema 7 - PostgreSQL - Gestión de usuarios y privilegios</h1>
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Para poder proteger los datos entre los múltiples usuarios que acceden a una Base de Datos, los SGBD utilizan la <strong>autenticación por usuarios</strong>.</p>
+
+<p>En principio cada usuario sólo puede acceder a sus tablas (las crea y es el propietario). Pero también se pueden dar permisos. Así pues, un usuario puede permitir la utilización de una tabla a otro usuario, dándole diferentes grados de acceso: sólo consultar, o insertar, borrar, actualizar, o todos los permisos a la vez, incluso que pueda otorgar permisos a otros usuarios.</p>
+
+<p>Cuando muchos usuarios van a tener permisos similares es conveniente el uso de <strong>grupos de usuarios</strong>. Así por ejemplo, si damos permiso de acceso a una tabla a un grupo de usuarios es como si hubiéramos dado permiso a todos los usuarios de ese grupo facilitando mucho el trabajo del DBA.</p>
+
+<p>A partir de la versión 8.1 de postgres tanto los usuarios como los grupos se gestionan con el concepto <strong>rol</strong> (<strong>ROLE</strong>). La diferencia entre ellos es que <strong>unos se pueden conectar</strong> (login) y son los roles de entrada (equivalentes a los usuarios) <strong>y otros no se pueden conectar</strong> (nologin) y son los roles de grupo.</p>
+
+<p><img src="/assets/asgbdTema7/logingroup.png" alt="ejemplos" /></p>
+
+<p>En la figura anterior sabemos que se está creando un rol de  usuario porque tiene activada la opción <strong>Can login? a YES</strong>. Si tuviera la opción <strong>Can login? a NO</strong> entonces sería un grupo.</p>
+
+<p>También vemos que no puede crear otros roles ni puede crear BD.</p>
+
+<h2 id="gestión-de-roles-utilización-como-usuarios">Gestión de Roles. Utilización como usuarios</h2>
+
+<p>Un <strong>rol</strong> es una entidad capaz de recoger permisos y privilegios. Uno de esos permisos es el de conexión (login). Podemos decir que <strong>los roles con el permiso LOGIN son los usuarios</strong>. Además del permiso de conexión también puede tener permisos para crear tablas, vistas, bases de datos, utilizarlos para hacer consultas o actualizaciones, etc</p>
+
+<p>Los roles no están incluidos en ninguna BD particular, son globales a toda la instalación PostgreSQL. Tanto si pueden hacer login como si no, todos los roles se guardan el la tabla <strong>pg_authid</strong>. También existen unas vistas de esta tabla para falcilitar la consulta y administración:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">pg_roles</code>, contiene todos los roles</li>
+  <li><code class="language-plaintext highlighter-rouge">pg_user</code>, contiene los usuarios, es decir, los roles que pueden hacer login</li>
+  <li><code class="language-plaintext highlighter-rouge">pg_shadow</code>, con contraseñas</li>
+  <li><code class="language-plaintext highlighter-rouge">pg_group</code>, los roles que no pueden hacer login</li>
+</ul>
+
+<p>Por tanto, la primera forma de manejar los roles sería manipulando directamente las tablas o las vistas anteriores, aunque esto no es muy recomendable.</p>
+
+<p>Nosotros utilizaremos sentencias SQL para la gestión de los roles y también podremos gestionarlos de forma gráfica.</p>
+
+<h3 id="psql-create-role-alter-role-drop-role">psql: CREATE ROLE, ALTER ROLE, DROP ROLE</h3>
+
+<p>Estas sentencias permite gestionar usuarios (login) y grupos (nologin). Tienen muchas opciones y puedes consultar su sintaxis en la ayuda de PostgreSQL.</p>
+
+<p>A continuación tienes algunos ejemplos sencillos de uso de estas sentencias:</p>
+
+<p>Crea el usuario (login) geo1 sin contraseña</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE ROLE geo1 LOGIN;
+</code></pre></div></div>
+
+<p>Crea el usuario (login) geo2 con la contraseña prueba</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE ROLE geo2 LOGIN PASSWORD 'prueba2';
+</code></pre></div></div>
+
+<p>Modifica el rol geo1 y le asigna la contraseña prueba</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ALTER ROLE geo1 PASSWORD 'prueba1';
+</code></pre></div></div>
+
+<p>Modifica el rol geo1 y permite un máximo de 3 conexiones simultáneas</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ALTER ROLE geo1 CONNECTION LIMIT 3
+</code></pre></div></div>
+
+<p>Elimina el rol geo</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DROP ROLE geo2;
+</code></pre></div></div>
+
+<h3 id="herramientas-gráficas-pgadmin">Herramientas Gráficas: pgAdmin</h3>
+
+<p>Desde pgadmin la creación, modificación y borrado de roles es muy sencilla. Además al finalizar la creación del rol podemos ver la sentencia SQL que se ha ejecutado para la creación del mismo. A continuación tienes un vídeo donde puedes ver la creación de roles con pgAdmin.</p>
+
+<p><a href="https://youtu.be/D57uSCKvCro">https://youtu.be/D57uSCKvCro</a></p>
+
+<p>Debes conectarte desde el cliente para poder seguir las instrucciones del vídeo.</p>
+
+<h2 id="gestión-de-roles-utilización-como-grupos">Gestión de Roles. Utilización como grupos</h2>
+
+<p>Un grupo es un rol que no se puede conectar (nologin). <strong>Los roles con el permiso NOLOGIN son los grupos</strong>. Los grupos tienen una serie de permisos sobre tablas, bases de datos, etc. Un rol de grupo se utiliza para que otros roles (en principio usuarios) puedan heredar sus permisos y así facilitar el trabajo del DBA.</p>
+
+<h3 id="psql-create-role-alter-role-drop-role-1">psql: CREATE ROLE, ALTER ROLE, DROP ROLE</h3>
+
+<p>La forma de crear un rol de grupo es la misma que para crear usuarios con la particularidad de que siempre llevarán la opción NOLOGIN</p>
+
+<p>Ejemplos:</p>
+
+<p>Crea el grupo grupo1 sin usuarios</p>
+
+<p>CREATE ROLE grupo1 NOLOGIN</p>
+
+<p>Crea el grupo2 y “mete” a geo1 en él.</p>
+
+<p>CREATE ROLE grupo2 NOLOGIN ROLE geo1;</p>
+
+<h3 id="herramientas-gráficas-pgadmin-1">Herramientas Gráficas: pgAdmin</h3>
+
+<p>Igual que en el apartado anterior. Creamos los grupos con la opción NOLOGIN.</p>
+
+<h2 id="permisos">Permisos</h2>
+
+<p>Una vez que sabemos como se crean los usuarios y los grupos vamos a ver que tipo de privilegios y permisos se les puede asignar. Los privilegios y permisos se pueden asignar desde <strong>psql</strong> mediante sentencias SQL o también de una forma mucho más cómoda desde <strong>pgAdmin</strong>. Tanto si lo hacemos por comandos como si lo hacemos de forma gráfica, <strong>al final se creará una sentencia SQL</strong> que al ejecutarse en la BD es la que finalmente otorgará o denegará los permisos.</p>
+
+<h3 id="psql-grant-y-revoke">psql: GRANT y REVOKE</h3>
+
+<p>Para dar permisos se utiliza la sentencia GRANT. Se pueden dar tres tipos de permisos.</p>
+
+<h4 id="otorgar-permisos-sobre-tablas">Otorgar permisos sobre tablas</h4>
+
+<p>La sintaxis es:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GRANT { {SELECT|INSERT|UPDATE|DELETE|REFERENCES|TRIGGER} [,...] | ALL [ PRIVILEGES ] }
+ON [ TABLE ] nombre_tabla [, ...]
+TO { nombre_usuario | GROUP nombre_grupo | PUBLIC } [, ...]
+[ WITH GRANT OPTION ]
+</code></pre></div></div>
+
+<p>Sobre una tabla se pueden dar permisos sólo para selecciona, o insertar, o modificar, o borrar, o crear una clave externa, o crear un trigger, … o todos ( ALL ).</p>
+
+<p>Se pueden dar permisos a un usuario (o más) o a un grupo, o a PUBLIC , es decir, todos los usuarios.</p>
+
+<p>Si ponemos la opción WITH GRANT OPTION , los usuarios a los que hemos dado permisos podrán otorgar estos permisos a otros usuarios.</p>
+
+<p>Cuando damos permiso a un grupo (al que pertenecen una serie de miembros), éstos heredaran los permisos únicamene si tienen el privilegio I NHERIT.</p>
+
+<p>Ejemplo:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GRANT SELECT, UPDATE ON comarques, poblacions TO GROUP g_geo;
+</code></pre></div></div>
+
+<p>Para hacer miembro de un rol de grupo a otro rol (normalmente un usuario)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GRANT rol_grupo TO rol_usuario;
+</code></pre></div></div>
+
+<p>Para dar permisos sobre la BD o sobre objetos de la misma (funciones, esquemas, etc).</p>
+
+<p>Para quitar permisos se utiliza la sentencia <strong>REVOKE</strong>. Se pueden quitar los tres tipos de permisos que hemos visto en el apartado anterior.</p>
+
+<p>La sintaxis es:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>REVOKE [ GRANT OPTION FOR ] { {SELECT|INSERT|UPDATE|DELETE|REFERENCES|TRIGGER} [,...] |
+ALL [ PRIVILEGES ] }
+ON [ TABLE ] nombre_tabla [, ...]
+FROM { nombre_usuario | GROUP nombre_grupo | PUBLIC } [, ...]
+[ CASCADE | RESTRICT ]
+</code></pre></div></div>
+
+<p>Hemos de tener en cuenta que sólo el usuario que ha otorgado los permisos (o el superusuario) puede quitar (revoke) permisos, excepto en el caso CASCADE , que quita los permisos a todos los usuarios que los han ido pasando por tener la opción WITH GRANT OPTION.</p>
+
+<p>Para quitar un usuario de un grupo</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>REVOKE rol_grupo FROM rol_usuario
+</code></pre></div></div>
+
+<h3 id="herramientas-gráficas-pgadmin-2">Herramientas Gráficas: pgAdmin</h3>
+
+<p>A continuación tienes un vídeo donde puedes ver como se otorgan y se quitan permisos de forma
+gráfica.</p>
+
+<p><a href="https://youtu.be/dZz1JMuTe0E">https://youtu.be/dZz1JMuTe0E</a></p>
+
+<p>Recuerda que esto debes hacerlo desde el cliente.</p>
+
+<h2 id="ejercicios">Ejercicios</h2>
+
+<p>Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.</p>
+
+<h3 id="ejercicio-77">Ejercicio 7.7</h3>
+
+<p>Crea 3 usuarios (usu1, usu2 y usu3) con las siguientes características:</p>
+
+<ul>
+  <li>La cuenta caduca el 31 de diciembre de este año.</li>
+  <li>Límite de conexiones 5</li>
+  <li>Puede crear roles</li>
+  <li>El resto de parámetros tomará los valores por defecto.</li>
+</ul>
+
+<p>Adjunta la sentencia SQL de creación de uno de los usuarios anteriores.</p>
+
+<h3 id="ejercicio-78">Ejercicio 7.8</h3>
+
+<p>Crea el grupo1 con las siguientes características:</p>
+
+<ul>
+  <li>Puede crear Bases de Datos</li>
+  <li>Puede crear Triggers en la tabla comarques (de la BD geo)</li>
+  <li>Puede consultar y añadir datos en la tabla instituts(no modificar ni eliminar).</li>
+  <li>Puede otorgar sus permisos de la tabla instituts a otros usuarios.</li>
+  <li>Haz que usu1 y usu2 sean miembros de este grupo.</li>
+</ul>
+
+<p>Adjunta la sentencia SQL de creación del grupo y las sentencias de modificación de los usuarios
+usu1 y usu2.</p>
+
+<h3 id="ejercicio-78-1">Ejercicio 7.8</h3>
+
+<p>Desde psql ejecuta estas dos consultas:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT * FROM pg_user;
+SELECT * FROM pg_group;
+</code></pre></div></div>
+
+<p>Ahora contensta a esta pregunta. ¿Qué información podemos obtener del campo <strong>grolist</strong>?</p>
+
+  </div><a class="u-url" href="/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">ASGBD</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">ASGBD</li><li><a class="u-email" href="mailto:xulioxesus@gmail.com">xulioxesus@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">xulioxesus</span></a></li><li><a href="https://www.twitter.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">xulioxesus</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Apuntes de Administración de sistemas gestores e bases de datos.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

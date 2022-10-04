@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>PostgreSQL - Entornos de trabajo | ASGBD</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="PostgreSQL - Entornos de trabajo" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tema 7 - PostgreSQL - Entornos de trabajo" />
+<meta property="og:description" content="Tema 7 - PostgreSQL - Entornos de trabajo" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo.html" />
+<meta property="og:site_name" content="ASGBD" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-25T09:22:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo.html","headline":"PostgreSQL - Entornos de trabajo","dateModified":"2021-01-25T09:22:00+01:00","datePublished":"2021-01-25T09:22:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo.html"},"description":"Tema 7 - PostgreSQL - Entornos de trabajo","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ASGBD" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ASGBD</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PostgreSQL - Entornos de trabajo</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-01-25T09:22:00+01:00" itemprop="datePublished">Jan 25, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="tema-7---postgresql---entornos-de-trabajo">Tema 7 - PostgreSQL - Entornos de trabajo</h1>
+
+<p>Una vez que hemos instalado el servidor, vamos a trabajar con él. Tradicionalmente se han utilizado tres entornos de trabajo con Postgres.</p>
+
+<ul>
+  <li><strong>psql:</strong> Es la consola de comandos. Un poco “primitiva” pero en ocasiones puede ser la única opción de conectar con el servidor.Como regla general se utilizarán otros entornos de trabajo más “amigables”.</li>
+  <li><strong>pgAdmin:</strong> Es el entorno gráfico oficial de Postgres. pgAdmin ha ido evolucionando a la par que ha ido evolucionando Postgres. Es un entorno de trabajo potente, robusto y amigable. Será el entorno de trabajo que utilizaremos mayormente en este tema.</li>
+  <li><strong>phppgAdmin:</strong> Es un entorno web que por lo tanto no necesita ser instalado en el cliente. Nos permite acceder a nuestro servidor Postgres desde cualquier equipo. Es similar al phpmyadmin que vimos en el tema de MySQL pero no funciona “tan fino” como debería y por lo tanto no lo vamos a utilizar. Si quieres probar la instalación aquí tienes el enlace a la página oficial: <a href="https://github.com/phppgadmin/phppgadmin">https://github.com/phppgadmin/phppgadmin</a></li>
+</ul>
+
+<h2 id="psql">psql</h2>
+
+<p>Como ya hemos comentado, el cliente más sencillo sin entorno gráfico es <strong>psql</strong>. Este programa nos permite realizar cualquier tipo de operación sobre las bases de datos de postgres. Al tener que trabajar por comandos sólo se recomienda para casos puntuales o para usuarios expertos.</p>
+
+<p>Para iniciar psql desde el servidor escribimos:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -u postgres psql
+</code></pre></div></div>
+
+<p>Los datos de la conexión que utiliza plsql por defecto son:</p>
+
+<ul>
+  <li>server: localhost</li>
+  <li>puerto: 5432</li>
+  <li>base de datos: postgres</li>
+  <li>usuario: postgres</li>
+</ul>
+
+<p>También podemos conectar con otros usuarios, base de datos, puertos, etc especificando la opción correcta al llamar al programa psql. Aquí tienes algunas opciones:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-? Ayuda
+-d nombre_bd Nombre de la Base de datos
+-p puerto Puerto de conexión del servidor
+-U nombre Nombre del Usuario
+-W Para que solicite obligatoriamente la contraseña
+</code></pre></div></div>
+
+<p>Una vez dentro del programa (ya hemos conectado con psql) ya podemos escribir los comandos
+que necesitemos.</p>
+
+<p>Las sentencias SQL pueden ocupar más de una línea y tienen que terminar con punto y coma.</p>
+
+<p>Con las flechas del cursos se puede recuperar la sentencia anterior (únicamente una línea).</p>
+
+<p>También existen comandos propios de psql que podemos utilizar:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\e Invoca un editor para editar la última entencia
+\d Listado de las tablas
+\d tabla Descripción de la tabla
+\g [fichero] Ejecuta la sentencia SQL y envía el resultado a un fichero
+\i fichero Ejecuta la sentencias (o sentencias) SQL del fichero
+\w fichero Guarda la sentencia del buffer en un fichero
+\q Salir de psql
+</code></pre></div></div>
+
+<p>A continuación tienes un vídeo donde puedes ver la forma de conectar y algunos ejemplos de
+utilización de <strong>psql</strong> : <a href="https://youtu.be/1raopEYJpio">https://youtu.be/1raopEYJpio</a></p>
+
+<p>Para seguir los pasos del vídeo en nuestro servidor sin interfaz gráfica debes seguir los siguientes pasos:</p>
+
+<p>Descarga el fichero sql mediante wget.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://pastebin.com/raw/UexT4J4w -O dades_geo.sql
+</code></pre></div></div>
+
+<p>Inicia sesión en psql</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -u postgres psql
+</code></pre></div></div>
+
+<p>Una vez dentro de psql ejecuta los comandos que se muestran en el vídeo. La única diferencia es que probablemente el fichero se tenga que importar cambiando la ruta donde se ha descargado.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\i /home/vagrant/dades_geo.sql
+</code></pre></div></div>
+
+<h2 id="pgadmin">pgAdmin:</h2>
+
+<p>pgAdmin es el entorno oficial de trabajo de postgres. Es un entorno gráfico muy intuitivo y que nos permite realizar todas las tareas necesarias en la Base de Datos.</p>
+
+<p>A continuación tienes un vídeo donde puedes ver la forma de conectar y algunos ejemplos de utilización de <strong>pgAdmin</strong> : <a href="https://youtu.be/drp6CmbYpQg">https://youtu.be/drp6CmbYpQg</a>.</p>
+
+<p>Dado que no tenemos pgadmin instalado en el servidor, no podemos seguir el vídeo hasta que podamos conectarnos desde el cliente utilizando pgadmin4.</p>
+
+<h2 id="ejercicios">Ejercicios</h2>
+
+<p>Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.</p>
+
+<h3 id="ejercicio-71">Ejercicio 7.1</h3>
+
+<p>Averigua cuántas <strong>poblacions</strong> están situadas a más de 700 metros de altura.</p>
+
+<h3 id="ejercicio-72">Ejercicio 7.2</h3>
+
+<p>Desde <strong>psql</strong> conecta con el usuario <strong>postgres</strong>. Luego utiliza los comandos</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\c
+</code></pre></div></div>
+
+<p>y</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\conninfo
+</code></pre></div></div>
+
+<p>para cambiar de usuario y conectarte a la base de datos <strong>geo</strong> con el usuario <strong>geo</strong>.</p>
+
+<h3 id="ejercicio-73">Ejercicio 7.3</h3>
+
+<p>Desde <strong>psql</strong> podemos utilizar el comando <strong>\copy</strong> para guardar el resultado de una consulta en un fichero. Aquí tienes dos ejemplos:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\copy (select * from comarques) TO /tmp/prueba.txt;
+\copy (select * from comarques) TO /tmp/prueba.csv WITH CSV DELIMITER ';';
+</code></pre></div></div>
+
+<p>Guarda el resultado del ejercicio 7.1 en un fichero y comprueba que el fichero se ha generado de forma correcta.</p>
+
+  </div><a class="u-url" href="/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">ASGBD</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">ASGBD</li><li><a class="u-email" href="mailto:xulioxesus@gmail.com">xulioxesus@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">xulioxesus</span></a></li><li><a href="https://www.twitter.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">xulioxesus</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Apuntes de Administración de sistemas gestores e bases de datos.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

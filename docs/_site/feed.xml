@@ -1,4 +1,1231 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-07T22:09:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">Mysql - Instalación en el servidor</title><link href="http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor.html" rel="alternate" type="text/html" title="Mysql - Instalación en el servidor" /><published>2021-01-07T20:12:00+01:00</published><updated>2021-01-07T20:12:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor.html">&lt;h1 id=&quot;instalación-de-lamp-en-ubuntu-server&quot;&gt;Instalación de LAMP en Ubuntu Server&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-10-04T12:00:06+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ASGBD</title><subtitle>Apuntes de Administración de sistemas gestores e bases de datos.</subtitle><entry><title type="html">PostgreSQL - Copias de seguridad</title><link href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad.html" rel="alternate" type="text/html" title="PostgreSQL - Copias de seguridad" /><published>2021-01-26T09:25:00+01:00</published><updated>2021-01-26T09:25:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/26/postgresql-6-copias-de-seguridad.html">&lt;h1 id=&quot;tema-7---postgresql---copias-de-seguridad&quot;&gt;Tema 7 - PostgreSQL - Copias de seguridad&lt;/h1&gt;
+
+&lt;h2 id=&quot;introducción&quot;&gt;Introducción&lt;/h2&gt;
+
+&lt;p&gt;Esta tarea tan fundamental del DBA es muy sencilla de hacer en Postgres y se puede planificar con un script que se ejecute periódicamente.&lt;/p&gt;
+
+&lt;p&gt;Se puede decir que existen tres formas de hacer el backup:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Con el programa &lt;strong&gt;pg_dump&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;De forma gráfica con &lt;strong&gt;PgAdmin&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Copiando directamente los ficheros&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;También existe la posibilidad de realizar un &lt;strong&gt;PITR (Point in Time Recovery)&lt;/strong&gt; que consiste en la recuperación del sistema hasta un momento concreto (parecido a la recuperación de Oracle en el modo ARCHIVELOG).  Para poder hacer una recuperación en el tiempo, es necesario que Postgres guarde todos los cambios que se realicen en el sistema en unos ficheros llamados &lt;strong&gt;WAL&lt;/strong&gt; (Write Ahead Log - información sobre las transacciones realizadas). Este tipo de recuperación es muy avanzada y no la vamos a ver en
+este curso.&lt;/p&gt;
+
+&lt;h2 id=&quot;copia-de-seguridad-con-pg_dump&quot;&gt;Copia de seguridad con pg_dump&lt;/h2&gt;
+
+&lt;p&gt;Básicamente consiste en generar un fichero de texto con las consultas SQL necesarias para rehacer la Base de Datos tal y como estaba en el momento de ejecutar el &lt;strong&gt;pg_dump&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;El programa &lt;strong&gt;pg_dump&lt;/strong&gt; se encuentra en la misma ruta ( &lt;strong&gt;/usr/lib/postgresql/12/bin&lt;/strong&gt; ) que el resto de programas de postgres y sus opciones principales son las siguientes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-a&lt;/code&gt;, sólo guarda los datos&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-s&lt;/code&gt;, Sólo guarda la estructura&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--inserts&lt;/code&gt;, utiliza la sentencia INSERT para los datos (sino utilizará COPY)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--column-inserts&lt;/code&gt;, incluye los nombres de las columnas en las sentencias&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-f fichero&lt;/code&gt;, envía el resultado a un fichero&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-F formato&lt;/code&gt;, indica el formato de salida ( c custom, d directory, t tar, p plain text)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-n nombreBD&lt;/code&gt;, sólo copia la BD especificada&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-t&lt;/code&gt;, nombreTabla Sólo copia la tabla especificada&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--help&lt;/code&gt;, muestra la ayuda con todas las opciones (igual que -? )&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Además, también tenemos las habituales opciones de conexión: &lt;strong&gt;-h&lt;/strong&gt; (host), &lt;strong&gt;-p&lt;/strong&gt; (puerto), &lt;strong&gt;-U&lt;/strong&gt; usuario y &lt;strong&gt;-W&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;A continuación tienes algunos ejemplos de uso del programa pg_dump:&lt;/p&gt;
+
+&lt;p&gt;Se conecta con el usuario geo y hace una copia de seguridad de toda la base de datos geo. La guarda en el fichero geo.sql&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_dump -U geo &amp;gt; geo.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Esta vez sólo copia la estructura de la base de datos geo.
+	pg_dump -s -U geo &amp;gt; geo.sql&lt;/p&gt;
+
+&lt;p&gt;Sólo copia los datos utilizando sentencias INSERT&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_dump -a --inserts -U geo &amp;gt; geo.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Sólo copia la estructura de las tablas comarques e instituts.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_dump -s -t comarques -t instituts -U geo &amp;gt; geo.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Si no tenemos suficientes permisos para crear archivos en el directorio donde nos encontramos nos mostrará el error “Permiso denegado”.&lt;/p&gt;
+
+&lt;p&gt;Una variante de pg_dump es &lt;strong&gt;pd_dumpall&lt;/strong&gt; que hace la copia de seguridad de &lt;strong&gt;todas las BD&lt;/strong&gt; del sistema. Este programa habrá que ejecutarlo como postgres para tener acceso a todas las BD. También guarda otros objetos que no pertenecen a ninguna BD como son los usuarios y los grupos.El inconveniente es que hay que introducir la contraseña del usuario postgres tantas veces como BD haya en el sistema.&lt;/p&gt;
+
+&lt;p&gt;En la imagen anterior puedes ver que el programa &lt;strong&gt;pg_dumpall&lt;/strong&gt; pide 4 veces la contraseña porque existen 4 BD en el sistema.&lt;/p&gt;
+
+&lt;p&gt;Muestra la ayuda con todas las opciones del programa&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_dumpall -?
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;restauración-del-fichero-generado-con-pg_dump&quot;&gt;Restauración del fichero generado con pg_dump&lt;/h2&gt;
+
+&lt;p&gt;Si el fichero de salida &lt;strong&gt;no tiene ningún formato&lt;/strong&gt; (no hemos utilizado la opción -F), entonces lo ejecutaremos desde &lt;strong&gt;psql&lt;/strong&gt; ya que son sentencias SQL. Desde fuera (sin entrar en psql) se puede hacer de dos maneras:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;psql nombre_bd &amp;lt; fichero
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;o&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;psql -f fichero nombre_bd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;También se puede hacer desde dentro de psql con la opción \i fichero&lt;/p&gt;
+
+&lt;p&gt;Para que este tipo de restauración funcione tanto la Base de Datos como el usuario deben existir.&lt;/p&gt;
+
+&lt;p&gt;Combinando el programa pg_dump con psql se puede “pasar” la información de una BD a otra:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_dump bd1 | psql bd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;o incluso a otra BD que esté en otro servidor&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_dump bd1 | psql -h host bd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Si el fichero de salida &lt;strong&gt;tenía algún formato&lt;/strong&gt; (porque hemos utilizado la opción -F), entonces la restauración se realizará con el programa pg_restore.&lt;/p&gt;
+
+&lt;p&gt;Las principales opciones de pg_restore son:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-a&lt;/code&gt;, sólo restaura los datos&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-s&lt;/code&gt;, sólo restaura la estructura&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-c&lt;/code&gt;, borra los objetos antes de rellenarlos&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-C&lt;/code&gt;, crea la BD antes de restaurarla&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-d&lt;/code&gt;, nombreBD Se conecta a la BD y restaura directamente en ella&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-F&lt;/code&gt;, formato Indica el formato del fichero de entrada&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-t&lt;/code&gt;, nombretabla Restaura la tabla especificada&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Además, también tenemos las habituales opciones de conexión: &lt;strong&gt;-h&lt;/strong&gt; (host), &lt;strong&gt;-p&lt;/strong&gt; (puerto), &lt;strong&gt;-U&lt;/strong&gt; usuario y &lt;strong&gt;-W&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;copia-de-seguridad-desde-pgadmin&quot;&gt;Copia de seguridad desde pgAdmin&lt;/h2&gt;
+
+&lt;p&gt;Hacer copias de seguridad desde pgAdmin es muy sencillo. Realmente estaremos ejecutando &lt;strong&gt;pg_dump&lt;/strong&gt; pero desde un entorno gráfico, sin necesidad de conocer la sintaxix de todas las opciones que nos ofrece pg-dump.&lt;/p&gt;
+
+&lt;p&gt;A continuación tienes un vídeo donde puedes ver la creación de copias de seguridad y restauración desde pgAdmin.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=YKCAuic0mD0&quot;&gt;https://www.youtube.com/watch?v=YKCAuic0mD0&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;copia-de-seguridad-copiando-directamente-los-ficheros&quot;&gt;Copia de seguridad copiando directamente los ficheros&lt;/h2&gt;
+
+&lt;p&gt;También podemos hacer copias de seguridad “en frío” copiando directamente los ficheros del servidor.&lt;/p&gt;
+
+&lt;p&gt;Para ello tenemos que relizar las siguientes tareas:&lt;/p&gt;
+
+&lt;p&gt;Parar el servidor (de cualquiera de las formas vistas con anterioridad)&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo service postgresql stop
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Copiar todos los ficheros con la estructura de directorios&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo tar -cf nombre_fichero_tar /var/lib/postgresql/12/main/data
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Poner en marcha el servidor&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo service postgresql start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;La restauración será el proceso inverso:&lt;/p&gt;
+
+&lt;p&gt;Parar el servidor&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo service postgresql-10 stop
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Restaurar los ficheros&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo tar -xf nombre_fichero_tar -C /
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Poner en marcha el servidor&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo service postgresql-10 start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;ejercicios&quot;&gt;Ejercicios&lt;/h2&gt;
+
+&lt;p&gt;Los siguientes ejercicios se pueden realizar de varias formas. Elige una y adjunta las capturas de
+pantalla necesarias.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-713&quot;&gt;Ejercicio 7.13&lt;/h3&gt;
+
+&lt;p&gt;Crea una copia de seguridad de la estructura de la Base de Datos geo.  Utiliza esta copia de seguridad para restaurar o crear una nueva BD que se llame “geo_nueva”&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-714&quot;&gt;Ejercicio 7.14&lt;/h3&gt;
+
+&lt;p&gt;Traspasa los datos de la tabla comarques de la BD geo a la tabla comarques de la BD geo_nueva.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Tema 7 - PostgreSQL - Copias de seguridad</summary></entry><entry><title type="html">PostgreSQL - Gestión de bases de datos</title><link href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-5-gestion-de-bases-de-datos.html" rel="alternate" type="text/html" title="PostgreSQL - Gestión de bases de datos" /><published>2021-01-26T09:00:00+01:00</published><updated>2021-01-26T09:00:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/26/postgresql-5-gestion-de-bases-de-datos</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/26/postgresql-5-gestion-de-bases-de-datos.html">&lt;h1 id=&quot;tema-7---postgresql---gestión-de-bases-de-datos&quot;&gt;Tema 7 - PostgreSQL - Gestión de bases de datos&lt;/h1&gt;
+
+&lt;h2 id=&quot;introducción&quot;&gt;Introducción&lt;/h2&gt;
+
+&lt;p&gt;Una Base de Datos es un lugar donde puede haber uno o más esquemas, y en cada esquema se pueden crear muchos objetos.&lt;/p&gt;
+
+&lt;p&gt;Por deformación del lenguaje solemos llamar Base de Datos al propio Sistema Gestor de BD pero este uso del término BD es incorrecto.&lt;/p&gt;
+
+&lt;p&gt;En Oracle hablamos de Instancia y dentro de cada instancia puede haber muchas bases de datos o esquemas. Incluso podemos poner más de una instancia de Oracle en marcha en el mismo servidor.&lt;/p&gt;
+
+&lt;p&gt;En Postgres, el término correcto es &lt;strong&gt;CLUSTER DE BASES DE DATOS&lt;/strong&gt;. Dentro de nuestro cluster hemos creado la BD geo y dentro de geo tenemos un esquema (public) donde hemos creado las tablas. También podemos poner más de un Cluster en marcha, aunque eso sí, tendría que escuchar por otro puerto.&lt;/p&gt;
+
+&lt;p&gt;Nosotros vamos a trabajar con un único cluster, que se pone en marcha de forma automática cuando iniciamos el servidor.&lt;/p&gt;
+
+&lt;h2 id=&quot;creación-modificación-y-eliminación-de-bases-de-datos&quot;&gt;Creación, modificación y eliminación de Bases de Datos&lt;/h2&gt;
+
+&lt;p&gt;Tanto si creamos la base de datos desde &lt;strong&gt;psql&lt;/strong&gt; como si lo hacemos desde una &lt;strong&gt;herramienta gráfica&lt;/strong&gt; , el resultado final es una sentencia SQL que dará origen a la nueva Base de Datos. La sintaxis de esta sentencia es la siguiente:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CREATE DATABASE nombre
+[ [ WITH ] [ OWNER [=] nombre_propietario ]
+[ TEMPLATE [=] template ]
+[ ENCODING [=] encoding ]
+[ TABLESPACE [=] tablespace ]
+[ CONNECTION LIMIT [=] num_conn ] ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;En principio el propietario de la Base de Datos será el usuario que la crea. Para crear una Base de datos, Postgres hace una copia de una base de datos existente, si no especificamos nada utilizará una plantilla vacía (template0 o template1). También se puede especificar el Tablespace donde se guardarán los objetos de la Base de Datos.&lt;/p&gt;
+
+&lt;p&gt;Los parámetros que no se indiquen expresamente en la consulta tomarán el valor por defecto.  Así pues la sentencia más simple de creación de BD es:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CREATE DATABASE prueba;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para modificar una base de datos se utiliza la sentencia:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ALTER DATABASE
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para eliminar una base de datos se utiliza la sentencia&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DROP DATABASE
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A continuación tienes un vídeo donde puedes ver la creación/modificación/borrado de BD.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://youtu.be/0CeFpgG1op&quot;&gt;https://youtu.be/0CeFpgG1op&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Recuerda hacerlo desde el cliente.&lt;/p&gt;
+
+&lt;h2 id=&quot;esquemas&quot;&gt;Esquemas&lt;/h2&gt;
+
+&lt;p&gt;En una Base de Datos, como mínimo hay un esquema. La mayor parte de las veces este esquema será &lt;strong&gt;public&lt;/strong&gt; (pero no siempre tiene que ser así). En cada esquema se pueden crear diferentes objetos: tablas, vistas, funciones, triggers, etc.&lt;/p&gt;
+
+&lt;p&gt;Nosotros vamos a utilizar el esquema &lt;strong&gt;public&lt;/strong&gt; que se crea por defecto y no vamos a profundizar en este tema.&lt;/p&gt;
+
+&lt;h2 id=&quot;tablespaces&quot;&gt;Tablespaces&lt;/h2&gt;
+
+&lt;p&gt;De forma lógica los objetos de todos los usuarios se organizan en Bases de Datos y dentro de éstas en Esquemas. Dentro de los esquemas tenemos las tablas, funciones, triggers, etc.&lt;/p&gt;
+
+&lt;p&gt;Pero de forma física, todos los datos se guardan en el mismo lugar. En la instalación automática en Ubuntu, este lugar es:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/var/lib/postgresql/12/main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para poder guardar los datos físicamente de una forma ordenada disponemos de los &lt;strong&gt;TABLESPACES&lt;/strong&gt;. Literalmente son espacios de tablas, lugares donde poder guardar las tablas y otros objetos. De esta forma podemos añadir tablespaces y asignar un tablespace diferente para cada usuario.  Así mejoraríamos la seguridad, los backups, etc.&lt;/p&gt;
+
+&lt;p&gt;Pero todo esto es a nivel físico. Un usuario no notará la diferencia entre tener guardado un objeto en un tablespace o en otro.&lt;/p&gt;
+
+&lt;p&gt;La sintaxis es la siguiente:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CREATE TABLESPACE nombre [ OWNER usuari ] LOCATION ' directorio '
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;donde el nombre del tablespace no puede empezar por &lt;strong&gt;pg_&lt;/strong&gt; ya que está reservado para los tablespaces del sistema.&lt;/p&gt;
+
+&lt;p&gt;Si no lo indicamos expresamente, el propietario del tablespace será el usuario que lo crea. El directorio donde se crea el tablespace tiene que existir, estar vacío y su propietario tiene que ser el superusuario (postgres).&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicios&quot;&gt;Ejercicios&lt;/h2&gt;
+
+&lt;p&gt;Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-710&quot;&gt;Ejercicio 7.10&lt;/h3&gt;
+
+&lt;p&gt;Crea un tablespace &lt;strong&gt;nuevo&lt;/strong&gt; que se llame &lt;strong&gt;prueba&lt;/strong&gt;. Adjunta la sentencia SQL.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;En la ruta /var/lib/postgresql/12/main/data&lt;/li&gt;
+  &lt;li&gt;Recuerda crear el directorio y cambiar el propietario y el grupo.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;ejercicio-711&quot;&gt;Ejercicio 7.11&lt;/h3&gt;
+
+&lt;p&gt;Crea una BD que se llame &lt;strong&gt;geo2&lt;/strong&gt; igual que la base de datos &lt;strong&gt;geo&lt;/strong&gt; y que utilice el tablespace del ejercicio anterior. El propietario tiene que ser &lt;strong&gt;usu2&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL que se genera.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-712&quot;&gt;Ejercicio 7.12&lt;/h3&gt;
+
+&lt;p&gt;Haz que el propietario de geo2 sea &lt;strong&gt;usu1&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL que se genera.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Tema 7 - PostgreSQL - Gestión de bases de datos</summary></entry><entry><title type="html">PostgreSQL - Gestión de usuarios y privilegios</title><link href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios.html" rel="alternate" type="text/html" title="PostgreSQL - Gestión de usuarios y privilegios" /><published>2021-01-26T07:45:00+01:00</published><updated>2021-01-26T07:45:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/26/postgresql-4-gestion-de-usuarios-y-privilegios.html">&lt;h1 id=&quot;tema-7---postgresql---gestión-de-usuarios-y-privilegios&quot;&gt;Tema 7 - PostgreSQL - Gestión de usuarios y privilegios&lt;/h1&gt;
+
+&lt;h2 id=&quot;introducción&quot;&gt;Introducción&lt;/h2&gt;
+
+&lt;p&gt;Para poder proteger los datos entre los múltiples usuarios que acceden a una Base de Datos, los SGBD utilizan la &lt;strong&gt;autenticación por usuarios&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;En principio cada usuario sólo puede acceder a sus tablas (las crea y es el propietario). Pero también se pueden dar permisos. Así pues, un usuario puede permitir la utilización de una tabla a otro usuario, dándole diferentes grados de acceso: sólo consultar, o insertar, borrar, actualizar, o todos los permisos a la vez, incluso que pueda otorgar permisos a otros usuarios.&lt;/p&gt;
+
+&lt;p&gt;Cuando muchos usuarios van a tener permisos similares es conveniente el uso de &lt;strong&gt;grupos de usuarios&lt;/strong&gt;. Así por ejemplo, si damos permiso de acceso a una tabla a un grupo de usuarios es como si hubiéramos dado permiso a todos los usuarios de ese grupo facilitando mucho el trabajo del DBA.&lt;/p&gt;
+
+&lt;p&gt;A partir de la versión 8.1 de postgres tanto los usuarios como los grupos se gestionan con el concepto &lt;strong&gt;rol&lt;/strong&gt; (&lt;strong&gt;ROLE&lt;/strong&gt;). La diferencia entre ellos es que &lt;strong&gt;unos se pueden conectar&lt;/strong&gt; (login) y son los roles de entrada (equivalentes a los usuarios) &lt;strong&gt;y otros no se pueden conectar&lt;/strong&gt; (nologin) y son los roles de grupo.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/asgbdTema7/logingroup.png&quot; alt=&quot;ejemplos&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;En la figura anterior sabemos que se está creando un rol de  usuario porque tiene activada la opción &lt;strong&gt;Can login? a YES&lt;/strong&gt;. Si tuviera la opción &lt;strong&gt;Can login? a NO&lt;/strong&gt; entonces sería un grupo.&lt;/p&gt;
+
+&lt;p&gt;También vemos que no puede crear otros roles ni puede crear BD.&lt;/p&gt;
+
+&lt;h2 id=&quot;gestión-de-roles-utilización-como-usuarios&quot;&gt;Gestión de Roles. Utilización como usuarios&lt;/h2&gt;
+
+&lt;p&gt;Un &lt;strong&gt;rol&lt;/strong&gt; es una entidad capaz de recoger permisos y privilegios. Uno de esos permisos es el de conexión (login). Podemos decir que &lt;strong&gt;los roles con el permiso LOGIN son los usuarios&lt;/strong&gt;. Además del permiso de conexión también puede tener permisos para crear tablas, vistas, bases de datos, utilizarlos para hacer consultas o actualizaciones, etc&lt;/p&gt;
+
+&lt;p&gt;Los roles no están incluidos en ninguna BD particular, son globales a toda la instalación PostgreSQL. Tanto si pueden hacer login como si no, todos los roles se guardan el la tabla &lt;strong&gt;pg_authid&lt;/strong&gt;. También existen unas vistas de esta tabla para falcilitar la consulta y administración:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_roles&lt;/code&gt;, contiene todos los roles&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_user&lt;/code&gt;, contiene los usuarios, es decir, los roles que pueden hacer login&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_shadow&lt;/code&gt;, con contraseñas&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_group&lt;/code&gt;, los roles que no pueden hacer login&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Por tanto, la primera forma de manejar los roles sería manipulando directamente las tablas o las vistas anteriores, aunque esto no es muy recomendable.&lt;/p&gt;
+
+&lt;p&gt;Nosotros utilizaremos sentencias SQL para la gestión de los roles y también podremos gestionarlos de forma gráfica.&lt;/p&gt;
+
+&lt;h3 id=&quot;psql-create-role-alter-role-drop-role&quot;&gt;psql: CREATE ROLE, ALTER ROLE, DROP ROLE&lt;/h3&gt;
+
+&lt;p&gt;Estas sentencias permite gestionar usuarios (login) y grupos (nologin). Tienen muchas opciones y puedes consultar su sintaxis en la ayuda de PostgreSQL.&lt;/p&gt;
+
+&lt;p&gt;A continuación tienes algunos ejemplos sencillos de uso de estas sentencias:&lt;/p&gt;
+
+&lt;p&gt;Crea el usuario (login) geo1 sin contraseña&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CREATE ROLE geo1 LOGIN;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Crea el usuario (login) geo2 con la contraseña prueba&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CREATE ROLE geo2 LOGIN PASSWORD 'prueba2';
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Modifica el rol geo1 y le asigna la contraseña prueba&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ALTER ROLE geo1 PASSWORD 'prueba1';
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Modifica el rol geo1 y permite un máximo de 3 conexiones simultáneas&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ALTER ROLE geo1 CONNECTION LIMIT 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Elimina el rol geo&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DROP ROLE geo2;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;herramientas-gráficas-pgadmin&quot;&gt;Herramientas Gráficas: pgAdmin&lt;/h3&gt;
+
+&lt;p&gt;Desde pgadmin la creación, modificación y borrado de roles es muy sencilla. Además al finalizar la creación del rol podemos ver la sentencia SQL que se ha ejecutado para la creación del mismo. A continuación tienes un vídeo donde puedes ver la creación de roles con pgAdmin.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://youtu.be/D57uSCKvCro&quot;&gt;https://youtu.be/D57uSCKvCro&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Debes conectarte desde el cliente para poder seguir las instrucciones del vídeo.&lt;/p&gt;
+
+&lt;h2 id=&quot;gestión-de-roles-utilización-como-grupos&quot;&gt;Gestión de Roles. Utilización como grupos&lt;/h2&gt;
+
+&lt;p&gt;Un grupo es un rol que no se puede conectar (nologin). &lt;strong&gt;Los roles con el permiso NOLOGIN son los grupos&lt;/strong&gt;. Los grupos tienen una serie de permisos sobre tablas, bases de datos, etc. Un rol de grupo se utiliza para que otros roles (en principio usuarios) puedan heredar sus permisos y así facilitar el trabajo del DBA.&lt;/p&gt;
+
+&lt;h3 id=&quot;psql-create-role-alter-role-drop-role-1&quot;&gt;psql: CREATE ROLE, ALTER ROLE, DROP ROLE&lt;/h3&gt;
+
+&lt;p&gt;La forma de crear un rol de grupo es la misma que para crear usuarios con la particularidad de que siempre llevarán la opción NOLOGIN&lt;/p&gt;
+
+&lt;p&gt;Ejemplos:&lt;/p&gt;
+
+&lt;p&gt;Crea el grupo grupo1 sin usuarios&lt;/p&gt;
+
+&lt;p&gt;CREATE ROLE grupo1 NOLOGIN&lt;/p&gt;
+
+&lt;p&gt;Crea el grupo2 y “mete” a geo1 en él.&lt;/p&gt;
+
+&lt;p&gt;CREATE ROLE grupo2 NOLOGIN ROLE geo1;&lt;/p&gt;
+
+&lt;h3 id=&quot;herramientas-gráficas-pgadmin-1&quot;&gt;Herramientas Gráficas: pgAdmin&lt;/h3&gt;
+
+&lt;p&gt;Igual que en el apartado anterior. Creamos los grupos con la opción NOLOGIN.&lt;/p&gt;
+
+&lt;h2 id=&quot;permisos&quot;&gt;Permisos&lt;/h2&gt;
+
+&lt;p&gt;Una vez que sabemos como se crean los usuarios y los grupos vamos a ver que tipo de privilegios y permisos se les puede asignar. Los privilegios y permisos se pueden asignar desde &lt;strong&gt;psql&lt;/strong&gt; mediante sentencias SQL o también de una forma mucho más cómoda desde &lt;strong&gt;pgAdmin&lt;/strong&gt;. Tanto si lo hacemos por comandos como si lo hacemos de forma gráfica, &lt;strong&gt;al final se creará una sentencia SQL&lt;/strong&gt; que al ejecutarse en la BD es la que finalmente otorgará o denegará los permisos.&lt;/p&gt;
+
+&lt;h3 id=&quot;psql-grant-y-revoke&quot;&gt;psql: GRANT y REVOKE&lt;/h3&gt;
+
+&lt;p&gt;Para dar permisos se utiliza la sentencia GRANT. Se pueden dar tres tipos de permisos.&lt;/p&gt;
+
+&lt;h4 id=&quot;otorgar-permisos-sobre-tablas&quot;&gt;Otorgar permisos sobre tablas&lt;/h4&gt;
+
+&lt;p&gt;La sintaxis es:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GRANT { {SELECT|INSERT|UPDATE|DELETE|REFERENCES|TRIGGER} [,...] | ALL [ PRIVILEGES ] }
+ON [ TABLE ] nombre_tabla [, ...]
+TO { nombre_usuario | GROUP nombre_grupo | PUBLIC } [, ...]
+[ WITH GRANT OPTION ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Sobre una tabla se pueden dar permisos sólo para selecciona, o insertar, o modificar, o borrar, o crear una clave externa, o crear un trigger, … o todos ( ALL ).&lt;/p&gt;
+
+&lt;p&gt;Se pueden dar permisos a un usuario (o más) o a un grupo, o a PUBLIC , es decir, todos los usuarios.&lt;/p&gt;
+
+&lt;p&gt;Si ponemos la opción WITH GRANT OPTION , los usuarios a los que hemos dado permisos podrán otorgar estos permisos a otros usuarios.&lt;/p&gt;
+
+&lt;p&gt;Cuando damos permiso a un grupo (al que pertenecen una serie de miembros), éstos heredaran los permisos únicamene si tienen el privilegio I NHERIT.&lt;/p&gt;
+
+&lt;p&gt;Ejemplo:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GRANT SELECT, UPDATE ON comarques, poblacions TO GROUP g_geo;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para hacer miembro de un rol de grupo a otro rol (normalmente un usuario)&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GRANT rol_grupo TO rol_usuario;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para dar permisos sobre la BD o sobre objetos de la misma (funciones, esquemas, etc).&lt;/p&gt;
+
+&lt;p&gt;Para quitar permisos se utiliza la sentencia &lt;strong&gt;REVOKE&lt;/strong&gt;. Se pueden quitar los tres tipos de permisos que hemos visto en el apartado anterior.&lt;/p&gt;
+
+&lt;p&gt;La sintaxis es:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;REVOKE [ GRANT OPTION FOR ] { {SELECT|INSERT|UPDATE|DELETE|REFERENCES|TRIGGER} [,...] |
+ALL [ PRIVILEGES ] }
+ON [ TABLE ] nombre_tabla [, ...]
+FROM { nombre_usuario | GROUP nombre_grupo | PUBLIC } [, ...]
+[ CASCADE | RESTRICT ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Hemos de tener en cuenta que sólo el usuario que ha otorgado los permisos (o el superusuario) puede quitar (revoke) permisos, excepto en el caso CASCADE , que quita los permisos a todos los usuarios que los han ido pasando por tener la opción WITH GRANT OPTION.&lt;/p&gt;
+
+&lt;p&gt;Para quitar un usuario de un grupo&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;REVOKE rol_grupo FROM rol_usuario
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;herramientas-gráficas-pgadmin-2&quot;&gt;Herramientas Gráficas: pgAdmin&lt;/h3&gt;
+
+&lt;p&gt;A continuación tienes un vídeo donde puedes ver como se otorgan y se quitan permisos de forma
+gráfica.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://youtu.be/dZz1JMuTe0E&quot;&gt;https://youtu.be/dZz1JMuTe0E&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Recuerda que esto debes hacerlo desde el cliente.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicios&quot;&gt;Ejercicios&lt;/h2&gt;
+
+&lt;p&gt;Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-77&quot;&gt;Ejercicio 7.7&lt;/h3&gt;
+
+&lt;p&gt;Crea 3 usuarios (usu1, usu2 y usu3) con las siguientes características:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;La cuenta caduca el 31 de diciembre de este año.&lt;/li&gt;
+  &lt;li&gt;Límite de conexiones 5&lt;/li&gt;
+  &lt;li&gt;Puede crear roles&lt;/li&gt;
+  &lt;li&gt;El resto de parámetros tomará los valores por defecto.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL de creación de uno de los usuarios anteriores.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-78&quot;&gt;Ejercicio 7.8&lt;/h3&gt;
+
+&lt;p&gt;Crea el grupo1 con las siguientes características:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Puede crear Bases de Datos&lt;/li&gt;
+  &lt;li&gt;Puede crear Triggers en la tabla comarques (de la BD geo)&lt;/li&gt;
+  &lt;li&gt;Puede consultar y añadir datos en la tabla instituts(no modificar ni eliminar).&lt;/li&gt;
+  &lt;li&gt;Puede otorgar sus permisos de la tabla instituts a otros usuarios.&lt;/li&gt;
+  &lt;li&gt;Haz que usu1 y usu2 sean miembros de este grupo.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL de creación del grupo y las sentencias de modificación de los usuarios
+usu1 y usu2.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-78-1&quot;&gt;Ejercicio 7.8&lt;/h3&gt;
+
+&lt;p&gt;Desde psql ejecuta estas dos consultas:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SELECT * FROM pg_user;
+SELECT * FROM pg_group;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ahora contensta a esta pregunta. ¿Qué información podemos obtener del campo &lt;strong&gt;grolist&lt;/strong&gt;?&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Tema 7 - PostgreSQL - Gestión de usuarios y privilegios</summary></entry><entry><title type="html">PostgreSQL - Ficheros de configuración</title><link href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion.html" rel="alternate" type="text/html" title="PostgreSQL - Ficheros de configuración" /><published>2021-01-26T06:35:00+01:00</published><updated>2021-01-26T06:35:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion.html">&lt;h1 id=&quot;tema-7---postgresql---ficheros-de-configuración&quot;&gt;Tema 7 - PostgreSQL - Ficheros de configuración&lt;/h1&gt;
+
+&lt;h2 id=&quot;ficheros-de-configuración&quot;&gt;Ficheros de configuración&lt;/h2&gt;
+
+&lt;p&gt;Básicamente son tres los ficheros de configuración de PostgreSQL. En nuestra instalación estos ficheros se encuentran en&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/etc/postgres/12/main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;postgresql.conf:&lt;/strong&gt; En este fichero se encuentran la mayor parte de los parámetros de configuración del servidor.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;pg_hba.conf:&lt;/strong&gt; Desde aquí se pueden controlar las conexiones al servidor. Podemos permitir o denegar las conexiones desde determinadas IPs, de usuarios, etc&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;pg_ident.conf:&lt;/strong&gt; Se combina con el fichero anterior para controlar el acceso al servidor. Nosotros no lo vamos a utilizar.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Para poder editar estos ficheros, no tendremos ningún problema en el caso de Windows, pero si tenemos el servidor en una máquina de Linux, tendremos que hacerlo desde un usuario con permisos.
+Tendremos que conectar como superusuario (sudo su), y después, o bien utilizar un editor como &lt;strong&gt;nano&lt;/strong&gt; o &lt;strong&gt;vi&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTA:&lt;/strong&gt; Si después de modificar algún fichero de configuración, éste tiene algún error (es
+sintácticamente incorrecto) PostgreSQL no podrá arrancar de nuevo. Por esta razón es &lt;strong&gt;MUY IMPORTANTE&lt;/strong&gt; hacer una &lt;strong&gt;copia de seguridad&lt;/strong&gt; de los ficheros de configuración &lt;strong&gt;ANTES&lt;/strong&gt; de realizar
+cualquier cambio.&lt;/p&gt;
+
+&lt;h2 id=&quot;postgresqlconf&quot;&gt;postgresql.conf&lt;/h2&gt;
+
+&lt;p&gt;Vamos a ver algunos parámetros de este fichero. Los parámetros que llevan delante &lt;strong&gt;#&lt;/strong&gt; están comentados y por lo tanto se toma el valor por defecto. Cuando modificamos algún parámetro de los
+ficheros de configuración, como mínimo tendremos que hacer un &lt;strong&gt;RELOAD&lt;/strong&gt; del servidor aunque en algunos casos no será suficiente y tendremos que hacer un &lt;strong&gt;RESTART&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Algunos parámetros y sus descripciones son:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hba_file&lt;/code&gt;, lugar donde se encuentra el fichero pg_hba.conf.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ident_file&lt;/code&gt;, lugar donde se encuentra el fichero pg_ident.conf.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;listen_addresses&lt;/code&gt;, lista de IPs desde las que se admiten conexiones.&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost&lt;/code&gt;, ólo admite conexiones locales (por defecto).&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt;, permite conexiones desde cualquier IP.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;port&lt;/code&gt;, puerto de escucha del servidor (por defecto 5432).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max_connections&lt;/code&gt;, número máximo de conexiones (excepto para DBA).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;superuser_reserved_connections&lt;/code&gt;, número de conexiones reservadas para el DBA; así pues, el máximo de conexiones para el resto de usuarios es: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max_connections - superuser_reserved_connections&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;authentication_timeout&lt;/code&gt;, tiempo máximo para autenticar a un usuario.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ssl&lt;/code&gt;, habilita las conexiones ssl (por defecto off).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;password_encryption&lt;/code&gt; determina si la contraseña está encriptada (por defecto on).&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Es de especial importancia el parámetro &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;listen_addresses&lt;/code&gt;, que marca los lugares desde donde nos podemos conectar al servidor.&lt;/p&gt;
+
+&lt;p&gt;La opción &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost&lt;/code&gt; únicamente permite conexiones desde el propio servidor mientras que la opción asterisco permite las conexiones desde cualquier dirección IP.&lt;/p&gt;
+
+&lt;h2 id=&quot;pg_hbaconf&quot;&gt;pg_hba.conf&lt;/h2&gt;
+
+&lt;p&gt;Este fichero de configuración guarda los usuarios que se pueden conectar al servidor, a qué bases de datos se pueden conectar, el tipo de autenticación, etc. Vamos a verlo con más detalle.&lt;/p&gt;
+
+&lt;p&gt;En cada línea del fichero hay una serie de campos:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Tipo de conexión =&amp;gt; Base de Datos =&amp;gt; Usuario =&amp;gt; Dirección IP =&amp;gt; Máscara IP =&amp;gt; Método autenticación
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;tipo-de-conexión&quot;&gt;Tipo de conexión&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LOCAL&lt;/code&gt;, la conexión se realiza desde la misma máquina donde está el servidor. Se realiza utilizando sockets Unix. Además del usuario de BD, también será necesario el usuario del SO que es quien realiza la solicitud de conexión.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HOST&lt;/code&gt;, indica conexiones externas por TCP/IP. Para poder habilitar este tipo de conexiones tenemos que asegurarnos que en el fichero postgresql.conf haya un asterisco para el parámetro &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;listen_addresses&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HOSTSSL&lt;/code&gt;, para conexiones que utilizan SSL sobre TCP/IP.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HOSTNOSSL&lt;/code&gt;, para conexiones que no utilizan SSL sobre TCP/IP.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;La conexión LOCAL utiliza sockets Unix, por lo tanto no estará disponible en Windows.&lt;/p&gt;
+
+&lt;h3 id=&quot;base-de-datos&quot;&gt;Base de Datos&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ALL&lt;/code&gt;, se permite conectar a todas las Bases de Datos.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SAMEUSER&lt;/code&gt;, se refiere a la Base de Datos con el mismo nombre de usuario.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SAMEROLE&lt;/code&gt;, se refiere a la Base de Datos con el mismo nombre que un rol de grupo al que pertenece el usuario. También se puede utilizar el sinónimo &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SAMEGROUP&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;usuario&quot;&gt;Usuario&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ALL&lt;/code&gt;, se refiere a todos los usuarios.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Si no es ALL, se interpretará como el nombre de un usuario, o más de uno separado por comas.&lt;/p&gt;
+
+&lt;h3 id=&quot;dirección-y-máscara-ip&quot;&gt;Dirección y Máscara IP&lt;/h3&gt;
+
+&lt;p&gt;Con estos dos datos (dirección IP y máscara de red) podemos especificar las direcciones IP que pueden conectarse al servidor. Se puede indicar una sola dirección IP o un rango de direcciones IP.&lt;/p&gt;
+
+&lt;p&gt;La máscara se puede indicar de la forma tradicional (por ejemplo: 255.255.255.0) o también con el prefijo (por ejemplo: /24).&lt;/p&gt;
+
+&lt;p&gt;Para indicar una sola dirección IP escribiremos la dirección IP con máscara 32. Por ejemplo para la dirección 192.168.1.23 escribiremos una de las dos opciones:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;192.168.1.23 255.255.255.255
+192.168.1.23/32
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para indicar un rango de direcciones utilizaremos la direción de red y la máscara
+correspondiente. Por ejemplo para cualquier equipo de la red 10.0.0.0/8 escribiremos una de las dos
+opciones:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;10.0.0.0 255.0.0.0
+10.0.0.0/8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;método-de-autenticación&quot;&gt;Método de autenticación&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TRUST&lt;/code&gt;, la conexión siempre se acepta sin realizar ninguna comprobación, sin proporcionar contraseña.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;REJECT&lt;/code&gt;, la conexión siempre se rechaza.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PASSWORD&lt;/code&gt;, obliga al cliente a proporcionar una contraseña. Estas contraseñas viajan por la red en texto plano y son fácilmente atacadas.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MD5&lt;/code&gt;, igual que el anterior pero la contraseña viaja cifrada por MD5.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IDENT&lt;/code&gt;, el usuario del SO y de PostgreSQL tienen que ser idénticos.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;ejemplos&quot;&gt;Ejemplos&lt;/h3&gt;
+
+&lt;p&gt;Aquí tienes algunos ejemplos de líneas que se pueden poner en el fichero &lt;strong&gt;pg_hba.conf&lt;/strong&gt; y su
+explicación:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/asgbdTema7/ejemplos.png&quot; alt=&quot;ejemplos&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Línea 82: permite la conexión desde el servidor a cualquier usuario a cualquier BD con contraseña.&lt;/p&gt;
+
+&lt;p&gt;Línea 83: permite la conexión desde la IP 192.168.1.26 al usuario postgres a la BD postgres con contraseña.&lt;/p&gt;
+
+&lt;p&gt;Línea 84: permite la conexión desde cualquier IP al usuario user1 a la BD user1 con contraseña.&lt;/p&gt;
+
+&lt;h2 id=&quot;iniciar-y-parar-el-servidor&quot;&gt;Iniciar y parar el servidor&lt;/h2&gt;
+
+&lt;p&gt;Existen varias formas de iniciar y parar el servidor.&lt;/p&gt;
+
+&lt;h3 id=&quot;automática&quot;&gt;Automática&lt;/h3&gt;
+
+&lt;p&gt;La mayor parte de las veces, tanto la puesta en marcha como la parada del servidor se realiza de forma automática cuando arrancamos o paramos el servidor.&lt;/p&gt;
+
+&lt;h3 id=&quot;comandos-del-sistema-operativo&quot;&gt;Comandos del Sistema Operativo&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo service postgresql-10 status
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;start&lt;/code&gt;, inicia el servidor&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stop&lt;/code&gt;, para el servidor&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;restart&lt;/code&gt;, reinicia el servidor (lo para y lo vuelve a iniciar)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;status&lt;/code&gt;, muestra información del estado del servidor&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;utilizando-pg_ctl&quot;&gt;Utilizando pg_ctl&lt;/h3&gt;
+
+&lt;p&gt;Es un script que se encuentra junto a todos los ejecutables de PostgreSQL (en la carpeta bin).&lt;/p&gt;
+
+&lt;p&gt;Además de las opciones anteriores (start, stop, …) se pueden añadir más opciones como la ubicación de la BD, la forma de parar, el número máximo de conexiones, etc.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-D&lt;/code&gt;, indica la carpeta donde se ubica la BD&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-m&lt;/code&gt;, indica la forma de parar la BD
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;s&lt;/code&gt; (smart) espera a que todos los usuarios estén desconectados&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f&lt;/code&gt; (fast) descarta las transacciones, desconecta a los usuarios y apaga el servidor&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; (inmediate) para el servidor de forma inmediata. Después se tendrá que recuperar la BD.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;ejemplos-de-uso&quot;&gt;Ejemplos de uso&lt;/h4&gt;
+
+&lt;p&gt;Cambiamos al usuario postgres&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo -u postgres
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nos movemos a la carpeta de instalación donde se encuentran los ejecutables&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /usr/lib/postgresql/12/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Reiniciamos la BD que está en la carpeta data&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_ctl -D data restart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Paramos la BD que está en data desconectando usuarios.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_ctl -D data -m s stop
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Iniciamos la BD que está en la carpeta data&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pg_ctl -D data start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;ejercicios&quot;&gt;Ejercicios&lt;/h2&gt;
+
+&lt;p&gt;Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-74&quot;&gt;Ejercicio 7.4&lt;/h3&gt;
+
+&lt;p&gt;Modifica el fichero &lt;strong&gt;pg_hba.conf&lt;/strong&gt; para permitir conectar con el usuario &lt;strong&gt;postgres&lt;/strong&gt; desde el equipo cliente a cualquier base de datos.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-75&quot;&gt;Ejercicio 7.5&lt;/h3&gt;
+
+&lt;p&gt;Modifica el fichero &lt;strong&gt;pg_hba.conf&lt;/strong&gt; para permitir conectar con el usuario &lt;strong&gt;geo&lt;/strong&gt; desde cualquier IP de la red local a la base de datos &lt;strong&gt;geo&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-76&quot;&gt;Ejercicio 7.6&lt;/h3&gt;
+
+&lt;p&gt;Desde el cliente abre una conexión con &lt;strong&gt;geo&lt;/strong&gt;. Ahora desde el servidor intenta parar la Base de Datos utilizando el script &lt;strong&gt;pg_ctl&lt;/strong&gt; con la opción &lt;strong&gt;s&lt;/strong&gt;. Observa el resultado. Si has podido parar la Base de Datos recuerda ponerla en marcha con cualquiera de los métodos vistos en los apuntes.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Tema 7 - PostgreSQL - Ficheros de configuración</summary></entry><entry><title type="html">PostgreSQL - Ejercicios</title><link href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-7-ejercicios.html" rel="alternate" type="text/html" title="PostgreSQL - Ejercicios" /><published>2021-01-26T06:15:00+01:00</published><updated>2021-01-26T06:15:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/26/postgresql-7-ejercicios</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/26/postgresql-7-ejercicios.html">&lt;p&gt;Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-71&quot;&gt;Ejercicio 7.1&lt;/h2&gt;
+
+&lt;p&gt;Averigua cuántas &lt;strong&gt;poblacions&lt;/strong&gt; están situadas a más de 700 metros de altura.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-72&quot;&gt;Ejercicio 7.2&lt;/h2&gt;
+
+&lt;p&gt;Desde &lt;strong&gt;psql&lt;/strong&gt; conecta con el usuario &lt;strong&gt;postgres&lt;/strong&gt;. Luego utiliza los comandos&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;y&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\conninfo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;para cambiar de usuario y conectarte a la base de datos &lt;strong&gt;geo&lt;/strong&gt; con el usuario &lt;strong&gt;geo&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-73&quot;&gt;Ejercicio 7.3&lt;/h2&gt;
+
+&lt;p&gt;Desde &lt;strong&gt;psql&lt;/strong&gt; podemos utilizar el comando &lt;strong&gt;\copy&lt;/strong&gt; para guardar el resultado de una consulta en un fichero. Aquí tienes dos ejemplos:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\copy (select * from comarques) TO /tmp/prueba.txt;
+\copy (select * from comarques) TO /tmp/prueba.csv WITH CSV DELIMITER ';';
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Guarda el resultado del ejercicio 7.1 en un fichero y comprueba que el fichero se ha generado de forma correcta.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-74&quot;&gt;Ejercicio 7.4&lt;/h2&gt;
+
+&lt;p&gt;Modifica el fichero &lt;strong&gt;pg_hba.conf&lt;/strong&gt; para permitir conectar con el usuario &lt;strong&gt;postgres&lt;/strong&gt; desde el equipo cliente a cualquier base de datos.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-75&quot;&gt;Ejercicio 7.5&lt;/h2&gt;
+
+&lt;p&gt;Modifica el fichero &lt;strong&gt;pg_hba.conf&lt;/strong&gt; para permitir conectar con el usuario &lt;strong&gt;geo&lt;/strong&gt; desde cualquier IP de la red local a la base de datos &lt;strong&gt;geo&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-76&quot;&gt;Ejercicio 7.6&lt;/h2&gt;
+
+&lt;p&gt;Desde el cliente abre una conexión con &lt;strong&gt;geo&lt;/strong&gt;. Ahora desde el servidor intenta parar la Base de Datos utilizando el script &lt;strong&gt;pg_ctl&lt;/strong&gt; con la opción &lt;strong&gt;s&lt;/strong&gt;. Observa el resultado. Si has podido parar la Base de Datos recuerda ponerla en marcha con cualquiera de los métodos vistos en los apuntes.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-77&quot;&gt;Ejercicio 7.7&lt;/h2&gt;
+
+&lt;p&gt;Crea 3 usuarios (usu1, usu2 y usu3) con las siguientes características:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;La cuenta caduca el 31 de diciembre de este año.&lt;/li&gt;
+  &lt;li&gt;Límite de conexiones 5&lt;/li&gt;
+  &lt;li&gt;Puede crear roles&lt;/li&gt;
+  &lt;li&gt;El resto de parámetros tomará los valores por defecto.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL de creación de uno de los usuarios anteriores.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-78&quot;&gt;Ejercicio 7.8&lt;/h2&gt;
+
+&lt;p&gt;Crea el grupo1 con las siguientes características:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Puede crear Bases de Datos&lt;/li&gt;
+  &lt;li&gt;Puede crear Triggers en la tabla comarques (de la BD geo)&lt;/li&gt;
+  &lt;li&gt;Puede consultar y añadir datos en la tabla instituts(no modificar ni eliminar).&lt;/li&gt;
+  &lt;li&gt;Puede otorgar sus permisos de la tabla instituts a otros usuarios.&lt;/li&gt;
+  &lt;li&gt;Haz que usu1 y usu2 sean miembros de este grupo.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL de creación del grupo y las sentencias de modificación de los usuarios
+usu1 y usu2.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicio-79&quot;&gt;Ejercicio 7.9&lt;/h2&gt;
+
+&lt;p&gt;Desde psql ejecuta estas dos consultas:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SELECT * FROM pg_user;
+
+SELECT * FROM pg_group;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ahora contensta a esta pregunta. ¿Qué información podemos obtener del campo &lt;strong&gt;grolist&lt;/strong&gt;?&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-710&quot;&gt;Ejercicio 7.10&lt;/h3&gt;
+
+&lt;p&gt;Crea un tablespace &lt;strong&gt;nuevo&lt;/strong&gt; que se llame &lt;strong&gt;prueba&lt;/strong&gt;. Adjunta la sentencia SQL.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;En la ruta /var/lib/postgresql/12/main/data&lt;/li&gt;
+  &lt;li&gt;Recuerda crear el directorio y cambiar el propietario y el grupo.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;ejercicio-711&quot;&gt;Ejercicio 7.11&lt;/h3&gt;
+
+&lt;p&gt;Crea una BD que se llame &lt;strong&gt;geo2&lt;/strong&gt; igual que la base de datos &lt;strong&gt;geo&lt;/strong&gt; y que utilice el tablespace del ejercicio anterior. El propietario tiene que ser &lt;strong&gt;usu2&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL que se genera.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-712&quot;&gt;Ejercicio 7.12&lt;/h3&gt;
+
+&lt;p&gt;Haz que el propietario de geo2 sea &lt;strong&gt;usu1&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Adjunta la sentencia SQL que se genera.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-713&quot;&gt;Ejercicio 7.13&lt;/h3&gt;
+
+&lt;p&gt;Crea una copia de seguridad de la estructura de la Base de Datos geo.  Utiliza esta copia de seguridad para restaurar o crear una nueva BD que se llame “geo_nueva”&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-714&quot;&gt;Ejercicio 7.14&lt;/h3&gt;
+
+&lt;p&gt;Traspasa los datos de la tabla comarques de la BD geo a la tabla comarques de la BD geo_nueva.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.</summary></entry><entry><title type="html">PostgreSQL - Entornos de trabajo</title><link href="http://localhost:4000/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo.html" rel="alternate" type="text/html" title="PostgreSQL - Entornos de trabajo" /><published>2021-01-25T09:22:00+01:00</published><updated>2021-01-25T09:22:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/25/postgresql-2-entornos-de-trabajo.html">&lt;h1 id=&quot;tema-7---postgresql---entornos-de-trabajo&quot;&gt;Tema 7 - PostgreSQL - Entornos de trabajo&lt;/h1&gt;
+
+&lt;p&gt;Una vez que hemos instalado el servidor, vamos a trabajar con él. Tradicionalmente se han utilizado tres entornos de trabajo con Postgres.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;psql:&lt;/strong&gt; Es la consola de comandos. Un poco “primitiva” pero en ocasiones puede ser la única opción de conectar con el servidor.Como regla general se utilizarán otros entornos de trabajo más “amigables”.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;pgAdmin:&lt;/strong&gt; Es el entorno gráfico oficial de Postgres. pgAdmin ha ido evolucionando a la par que ha ido evolucionando Postgres. Es un entorno de trabajo potente, robusto y amigable. Será el entorno de trabajo que utilizaremos mayormente en este tema.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;phppgAdmin:&lt;/strong&gt; Es un entorno web que por lo tanto no necesita ser instalado en el cliente. Nos permite acceder a nuestro servidor Postgres desde cualquier equipo. Es similar al phpmyadmin que vimos en el tema de MySQL pero no funciona “tan fino” como debería y por lo tanto no lo vamos a utilizar. Si quieres probar la instalación aquí tienes el enlace a la página oficial: &lt;a href=&quot;https://github.com/phppgadmin/phppgadmin&quot;&gt;https://github.com/phppgadmin/phppgadmin&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;psql&quot;&gt;psql&lt;/h2&gt;
+
+&lt;p&gt;Como ya hemos comentado, el cliente más sencillo sin entorno gráfico es &lt;strong&gt;psql&lt;/strong&gt;. Este programa nos permite realizar cualquier tipo de operación sobre las bases de datos de postgres. Al tener que trabajar por comandos sólo se recomienda para casos puntuales o para usuarios expertos.&lt;/p&gt;
+
+&lt;p&gt;Para iniciar psql desde el servidor escribimos:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo -u postgres psql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Los datos de la conexión que utiliza plsql por defecto son:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;server: localhost&lt;/li&gt;
+  &lt;li&gt;puerto: 5432&lt;/li&gt;
+  &lt;li&gt;base de datos: postgres&lt;/li&gt;
+  &lt;li&gt;usuario: postgres&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;También podemos conectar con otros usuarios, base de datos, puertos, etc especificando la opción correcta al llamar al programa psql. Aquí tienes algunas opciones:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-? Ayuda
+-d nombre_bd Nombre de la Base de datos
+-p puerto Puerto de conexión del servidor
+-U nombre Nombre del Usuario
+-W Para que solicite obligatoriamente la contraseña
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Una vez dentro del programa (ya hemos conectado con psql) ya podemos escribir los comandos
+que necesitemos.&lt;/p&gt;
+
+&lt;p&gt;Las sentencias SQL pueden ocupar más de una línea y tienen que terminar con punto y coma.&lt;/p&gt;
+
+&lt;p&gt;Con las flechas del cursos se puede recuperar la sentencia anterior (únicamente una línea).&lt;/p&gt;
+
+&lt;p&gt;También existen comandos propios de psql que podemos utilizar:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\e Invoca un editor para editar la última entencia
+\d Listado de las tablas
+\d tabla Descripción de la tabla
+\g [fichero] Ejecuta la sentencia SQL y envía el resultado a un fichero
+\i fichero Ejecuta la sentencias (o sentencias) SQL del fichero
+\w fichero Guarda la sentencia del buffer en un fichero
+\q Salir de psql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A continuación tienes un vídeo donde puedes ver la forma de conectar y algunos ejemplos de
+utilización de &lt;strong&gt;psql&lt;/strong&gt; : &lt;a href=&quot;https://youtu.be/1raopEYJpio&quot;&gt;https://youtu.be/1raopEYJpio&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Para seguir los pasos del vídeo en nuestro servidor sin interfaz gráfica debes seguir los siguientes pasos:&lt;/p&gt;
+
+&lt;p&gt;Descarga el fichero sql mediante wget.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://pastebin.com/raw/UexT4J4w -O dades_geo.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Inicia sesión en psql&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo -u postgres psql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Una vez dentro de psql ejecuta los comandos que se muestran en el vídeo. La única diferencia es que probablemente el fichero se tenga que importar cambiando la ruta donde se ha descargado.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\i /home/vagrant/dades_geo.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;pgadmin&quot;&gt;pgAdmin:&lt;/h2&gt;
+
+&lt;p&gt;pgAdmin es el entorno oficial de trabajo de postgres. Es un entorno gráfico muy intuitivo y que nos permite realizar todas las tareas necesarias en la Base de Datos.&lt;/p&gt;
+
+&lt;p&gt;A continuación tienes un vídeo donde puedes ver la forma de conectar y algunos ejemplos de utilización de &lt;strong&gt;pgAdmin&lt;/strong&gt; : &lt;a href=&quot;https://youtu.be/drp6CmbYpQg&quot;&gt;https://youtu.be/drp6CmbYpQg&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Dado que no tenemos pgadmin instalado en el servidor, no podemos seguir el vídeo hasta que podamos conectarnos desde el cliente utilizando pgadmin4.&lt;/p&gt;
+
+&lt;h2 id=&quot;ejercicios&quot;&gt;Ejercicios&lt;/h2&gt;
+
+&lt;p&gt;Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-71&quot;&gt;Ejercicio 7.1&lt;/h3&gt;
+
+&lt;p&gt;Averigua cuántas &lt;strong&gt;poblacions&lt;/strong&gt; están situadas a más de 700 metros de altura.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-72&quot;&gt;Ejercicio 7.2&lt;/h3&gt;
+
+&lt;p&gt;Desde &lt;strong&gt;psql&lt;/strong&gt; conecta con el usuario &lt;strong&gt;postgres&lt;/strong&gt;. Luego utiliza los comandos&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;y&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\conninfo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;para cambiar de usuario y conectarte a la base de datos &lt;strong&gt;geo&lt;/strong&gt; con el usuario &lt;strong&gt;geo&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;ejercicio-73&quot;&gt;Ejercicio 7.3&lt;/h3&gt;
+
+&lt;p&gt;Desde &lt;strong&gt;psql&lt;/strong&gt; podemos utilizar el comando &lt;strong&gt;\copy&lt;/strong&gt; para guardar el resultado de una consulta en un fichero. Aquí tienes dos ejemplos:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\copy (select * from comarques) TO /tmp/prueba.txt;
+\copy (select * from comarques) TO /tmp/prueba.csv WITH CSV DELIMITER ';';
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Guarda el resultado del ejercicio 7.1 en un fichero y comprueba que el fichero se ha generado de forma correcta.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Tema 7 - PostgreSQL - Entornos de trabajo</summary></entry><entry><title type="html">PostgreSQL - Introducción</title><link href="http://localhost:4000/jekyll/update/2021/01/25/postgresql-1-introduccion.html" rel="alternate" type="text/html" title="PostgreSQL - Introducción" /><published>2021-01-25T08:22:00+01:00</published><updated>2021-01-25T08:22:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/25/postgresql-1-introduccion</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/25/postgresql-1-introduccion.html">&lt;h1 id=&quot;tema-7---postgresql---introducción&quot;&gt;Tema 7 - PostgreSQL - Introducción&lt;/h1&gt;
+
+&lt;h2 id=&quot;objetivos&quot;&gt;Objetivos&lt;/h2&gt;
+
+&lt;p&gt;Una vez que ya sabemos cuál es el trabajo de administrar una gran base de datos como Oracle, vamos a aplicarlo a otro Sistema Gestor de Bases de Datos: &lt;strong&gt;PostgreSQL&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Hemos elegido PostgreSQL por su potencia y fiabilidad, y por otra característica muy importante: es software libre, así habremos visto a lo largo del curso dos sistemas gestores de bases de
+datos muy potentes: &lt;strong&gt;Oracle&lt;/strong&gt; (como sistema propietario) y &lt;strong&gt;PostgreSQL&lt;/strong&gt; (como software libre).&lt;/p&gt;
+
+&lt;p&gt;Los objetivos de este tema básicamente serán:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Instalar el sistema gestor.&lt;/li&gt;
+  &lt;li&gt;Arrancar y parar el servidor.&lt;/li&gt;
+  &lt;li&gt;Crear usuarios que puedan conectar al servidor con diferentes privilegios.&lt;/li&gt;
+  &lt;li&gt;Gestionar las Bases de Datos.&lt;/li&gt;
+  &lt;li&gt;Hacer copias de seguridad, y saber recuperar los datos en caso de necesidad.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;conocimientos-previos&quot;&gt;Conocimientos previos&lt;/h2&gt;
+
+&lt;p&gt;En este tema instalaremos PostgreSQL sobre Linux (aunque también se puede hacer sobre Windows u otros sistemas operativos). Se puede instalar sobre cualquier versión de Linux aunque nosotros preferentemente utilizaremos &lt;strong&gt;Ubuntu Server 20.04&lt;/strong&gt;, esta máquina virtual se puede descargar desde el drive del módulo.&lt;/p&gt;
+
+&lt;p&gt;Las credenciales para acceder a ella son:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Usuario: vagrant 
+Contraseña: vagrant
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;introducción&quot;&gt;Introducción&lt;/h2&gt;
+
+&lt;p&gt;Definido de forma rápida, PostgreSQL es un SGBD Relacional que incorpora conceptos de objetos.&lt;/p&gt;
+
+&lt;p&gt;Al ser un SGBD relacional, significa que soporta perfectamente la integridad referencial, las restricciones, disparadores o triggers, transacciones, etc. Además ofrece soporte prácticamente total al estandar SQL 92 / SQL 3.&lt;/p&gt;
+
+&lt;p&gt;Intenta ser muy flexible permitiendo tipos de datos nuevos creados por el usuario, operadores nuevos, etc.&lt;/p&gt;
+
+&lt;p&gt;Y sobretodo, incorpora también conceptos de BD orientadas a objetos. No es un SGBD completamente orientado a objetos, sino que incorpora algunos conceptos como la herencia y las clases.&lt;/p&gt;
+
+&lt;p&gt;El origen de PostgreSQL fue un proyecto de la Universidad de Berkeley. El nombre de Postgres se creó en 1986. En 1987 se lanzó la primera versión que fue mejorando hasta llegar a la versión 4.
+En 1994 se lanzó un “descendiente” de Postgres de dominio público y código abierto que e denominó &lt;strong&gt;Postgre95&lt;/strong&gt;. Este nombre no podía tener futuro y en 1996 se cambió a PostgreSQL. La primera
+versión de PostgreSQL fue la 6.0 para continuar con la secuencia del proyecto original de la Universidad.&lt;/p&gt;
+
+&lt;p&gt;En Linux, o mejor dicho, en el mundo del software libre, e utilizan principalmente dos SGBD: &lt;strong&gt;MySQL y PostgreSQL&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;En &lt;strong&gt;MySQL&lt;/strong&gt; se intenta, por encima de todo, que sea muy rápido y que gaste pocos recursos. Para conseguir esto incluso sacrifica (en algunos casos) cosas impensables como la integridad referencial, transacciones, etc. MySQL se ha impuesto en la creación de páginas web (junto con Apache, PHP y Perl) donde se busca sobretodo la velocidad.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;PostgreSQL&lt;/strong&gt; se puede definir como “más serio”, y aunque no llega a ser tan rápido como MySQL puede ser perfectamente un SGBD para sitios o empresas realmente grandes y que necesiten entornos seguros.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Existen muchas comparativas en Internet de SGBDs, y normalmente, la conclusión no es que uno sea mejor que otro, sino que depende de lo que se quiera hacer. ¿Qué necesitamos, velocidad o
+potencia?&lt;/p&gt;
+
+&lt;h2 id=&quot;instalación-del-servidor&quot;&gt;Instalación del servidor&lt;/h2&gt;
+
+&lt;p&gt;PostgreSQL se puede instalar en diversos sistemas operativos (Linux, Windows, OS). En estos apuntes veremos la instalación en Linux, concretamente en la máquina virtual Ubuntu Server 20.04.&lt;/p&gt;
+
+&lt;p&gt;En Linux existen varias formas de instalar PostgreSQL, por  paquetes, descargando el código fuente, etc.&lt;/p&gt;
+
+&lt;p&gt;Los repositorios por defecto de Ubuntu contienen paquetes Postgres, así que podemos instalarlo fácilmente utilizando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;apt&lt;/code&gt;. Si realizamos la instalación de esta forma no tendremos la última versión del sistema gestor.&lt;/p&gt;
+
+&lt;p&gt;A continuación tienes los comandos para instalar postgres desde el terminal:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;El procedimiento de instalación creó un usuario llamado postgres, para poder conectar al servidor debemos cambiar a la cuenta postgres&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo -i -u postgres
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ahora ya se puede acceder a la consola de postgres&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;psql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;También se puede acceder directamente a la consola de postgres con el siguiente comando:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo -u postgres psql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A continuación se muestra un vídeo donde se puede ver una forma sencilla de instalar PostgreSQL. Este vídeo sería útil si en el servidor se tiene interfaz gráfica y se desea realizar la instalación haciendo uso de la misma. NO DEBES SEGUIR EL VÍDEO.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=SWUzgFPR1-E&quot;&gt;Instalación de PostgreSQL en Ubuntu Mate 16.04&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Durante el proceso de instalación se ha creado un usuario &lt;strong&gt;postgres&lt;/strong&gt; que será el propietario de todo PostgreSQL.&lt;/p&gt;
+
+&lt;p&gt;De momento, en la base de datos sólo existe un usuario que también se llama &lt;strong&gt;postgres&lt;/strong&gt; que será el DBA.&lt;/p&gt;
+
+&lt;h2 id=&quot;instalación-del-cliente&quot;&gt;Instalación del cliente&lt;/h2&gt;
+
+&lt;p&gt;El cliente oficial de Postgres es &lt;strong&gt;pgAdmin&lt;/strong&gt;. El cliente recomendado es pgadmin4.&lt;/p&gt;
+
+&lt;h3 id=&quot;cliente-windows&quot;&gt;Cliente Windows&lt;/h3&gt;
+
+&lt;p&gt;A continuación tienes un vídeo donde puedes ver la instalación de pgAdmin en Windows. Sigue este vídeo si deseas utilizar como cliente una máquina real o virtual con Windows.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://youtu.be/rvQaphk4gCw&quot;&gt;Instalar pgAdmin4 en Windows&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cliente-linux&quot;&gt;Cliente Linux&lt;/h3&gt;
+
+&lt;p&gt;Sigue estos pasos para utilizar como cliente una máquina real o virtual con Linux. Puedes utilizar el Lubuntu 20.04 del tema anterior.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
+
+sudo sh -c 'echo &quot;deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main&quot; &amp;gt; /etc/apt/sources.list.d/pgadmin4.list &amp;amp;&amp;amp; apt update'
+
+sudo apt install pgadmin4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Tema 7 - PostgreSQL - Introducción</summary></entry><entry><title type="html">Mysql - Ejercicios</title><link href="http://localhost:4000/jekyll/update/2021/01/08/mysql-ejercicios.html" rel="alternate" type="text/html" title="Mysql - Ejercicios" /><published>2021-01-08T19:20:00+01:00</published><updated>2021-01-08T19:20:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/08/mysql-ejercicios</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/08/mysql-ejercicios.html">&lt;h1 id=&quot;mysql---ejercicios&quot;&gt;Mysql - Ejercicios&lt;/h1&gt;
+
+&lt;h1 id=&quot;ejercicio-61&quot;&gt;Ejercicio 6.1&lt;/h1&gt;
+
+&lt;p&gt;Hemos visto dos herramientas gráficas para administrar MySQL: phpmyadmin y Workbench.&lt;/p&gt;
+
+&lt;p&gt;Utiliza como cliente el sistema que prefieras. Máquina real o máquina virtual.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Adjunta capturas de pantalla que confirmen que has podido  conectar con  las dos herramientas desde el cliente.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Adjunta capturas que confirmen que  NO  puedes conectar con Workbench desde el cliente antes de configurar bind.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Razona porque desde el cliente SI SE PUEDE conectar con phpmyadmin pero NO SE PUEDE conectar con Workbench.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Todos los ejercicios se pueden hacer desde cualquiera de los 3 entornos que hemos visto:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Consola de mysql&lt;/li&gt;
+  &lt;li&gt;phpmyadmin&lt;/li&gt;
+  &lt;li&gt;workbench&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Elige el que más te guste y adjunta capturas de pantalla necesarias.&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-62&quot;&gt;Ejercicio 6.2&lt;/h1&gt;
+
+&lt;p&gt;Desde la base de datos de geo: ¿Cuántos institutos hay en Borriana?&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-63&quot;&gt;Ejercicio 6.3&lt;/h1&gt;
+
+&lt;p&gt;Añade un campo numérico “habitantes” a la tabla  comarques. Actualiza con elvalor 2000 este campo para todas las comarcas de Alacant, el resto de comarcas tendrán valor 0.&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-64&quot;&gt;Ejercicio 6.4&lt;/h1&gt;
+
+&lt;p&gt;Crea las bases de datos geo2, geo3 y geo4. De momento estarán vacías.&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-65&quot;&gt;EJERCICIO 6.5:&lt;/h1&gt;
+
+&lt;p&gt;Modifica el puerto de escucha de tu servidor MySQL. Asígnale el puerto 5000.&lt;/p&gt;
+
+&lt;p&gt;Cambia el parámetro bind-address a 0.0.0.0 (para permitir conexiones desde otros equipos). Está hecho en las instrucciones actualizadas.&lt;/p&gt;
+
+&lt;p&gt;Desde el servidor realiza una conexión MySQL Workbench (Crea una conexión nueva).&lt;/p&gt;
+
+&lt;p&gt;Adjunta capturas que demuestren que has realizado las tareas con éxito.&lt;/p&gt;
+
+&lt;p&gt;NOTA: Una vez terminado el ejercicio vuelve a dejar el puerto de escucha por defecto.&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-66&quot;&gt;Ejercicio 6.6&lt;/h1&gt;
+
+&lt;p&gt;Recuperar la contraseña de root.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Edita el fichero de configuracion &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysqld.cnf&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Añade la opción &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;skip-grant-tables&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Reinicia el servicio mysql: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo service mysql restart&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Conecta al servidor con el comando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo mysql -u root&lt;/code&gt; (no te pedirá contraseña)&lt;/li&gt;
+  &lt;li&gt;Ejecuta los siguientes comandos:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; use mysql;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;Si tu versión de MySQL es anterior a la 5.7
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; UPDATE user SET password='nuevacontraseña' WHERE user ='root';&lt;/code&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Si tu versión de MySQL es 5.7 o posterior
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; UPDATE user SET authentication_string=PASSWORD('nuevacontraseña')WHERE user ='root';&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; flush privileges;&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; quit&lt;/code&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Para la versión instalada en Ubuntu Server 20.04
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; flush privileges;&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'nuevacontraseña';&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mysql&amp;gt; exit&lt;/code&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Elimina la opción &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;skip-grant-tables&lt;/code&gt; del fichero de configuración&lt;/li&gt;
+  &lt;li&gt;Reinicia en servicio mysql&lt;/li&gt;
+  &lt;li&gt;Comprueba que necesitas la ‘nuevacontraseña’ para conectar: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo mysql -u root -p&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;ejercicio-67&quot;&gt;Ejercicio 6.7&lt;/h1&gt;
+
+&lt;p&gt;Crea  todos los  usuarios  “usu4”  que aparecen  en  la tabla del  punto  2.1  del documento.&lt;/p&gt;
+
+&lt;p&gt;Comprueba la contraseña que tendrá que utilizar usu4 para conectar con phpmyadmin desde el cliente.&lt;/p&gt;
+
+&lt;p&gt;Comprueba la contraseña que tendrá que utilizar  usu4  para conectar con Workbench desde el cliente.&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-68&quot;&gt;Ejercicio 6.8&lt;/h1&gt;
+
+&lt;p&gt;Crea un usuario (desde el entorno de trabajo que prefieras) con las siguientes características:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Tiene todos los privilegios en la base de datos geo.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Conecta con este usuario desde la consola mysql y saca un listado con el código y elnombre de todos los institutos de “Alcoi”.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;ejercicio-69&quot;&gt;Ejercicio 6.9&lt;/h1&gt;
+
+&lt;p&gt;Crea otro usuario con las siguientes características:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Puede realizar todas las operaciones en la tabla instituts de la BD geo.&lt;/li&gt;
+  &lt;li&gt;Puede realizar SELECT en las tablas comarques y poblacions.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;ejercicio-610&quot;&gt;Ejercicio 6.10&lt;/h1&gt;
+
+&lt;p&gt;Desde la consola haz una copia de seguridad de la base de datos geo y recupéralaen la base de datos geo2.&lt;/p&gt;
+
+&lt;p&gt;Adjunta el fichero de importación que has utilizado.&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-611&quot;&gt;Ejercicio 6.11&lt;/h1&gt;
+
+&lt;p&gt;¿Cuál es el comando para exportar todas las bases de datos desde la consola?&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-612&quot;&gt;Ejercicio 6.12&lt;/h1&gt;
+
+&lt;p&gt;Desde phpmyadmin haz una copia de seguridad (en 2 pasos) de la bd geo.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Primer paso: Copia de seguridad de la estructura (definición de tablas).&lt;/li&gt;
+  &lt;li&gt;Segundo paso: Copia de seguridad de los datos.Restaura los ficheros enteriores en la base de datos geo3.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Indica exactamente que opciones has utilizado en la exportación y adjunta los ficheros de exportación que has utilizado.&lt;/p&gt;
+
+&lt;p&gt;¿Has tenido que modificar estos ficheros para poder realizar la importación?&lt;/p&gt;
+
+&lt;p&gt;En caso afirmativo indica los motivos y adjunta los ficheros de importación.&lt;/p&gt;
+
+&lt;h1 id=&quot;ejercicio-613&quot;&gt;Ejercicio 6.13&lt;/h1&gt;
+
+&lt;p&gt;Desde Workbench.&lt;/p&gt;
+
+&lt;p&gt;Realiza la exportación de la base de las tablas  comarques  y poblacions de la base de datos geo en un único fichero.&lt;/p&gt;
+
+&lt;p&gt;A continuación importa estas tablas en la basede datos geo4.&lt;/p&gt;
+
+&lt;p&gt;Indica exactamente que opciones has utilizado y adjunta el fichero de exportación que has generado.&lt;/p&gt;
+
+&lt;p&gt;¿Has tenido que modificar el fichero para poder realizar la importación? En caso afirmativoindica los motivos y adjunta el fichero de importación.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Mysql - Ejercicios</summary></entry><entry><title type="html">Mysql - Instalación en el cliente</title><link href="http://localhost:4000/jekyll/update/2021/01/08/mysql-instalar-cliente.html" rel="alternate" type="text/html" title="Mysql - Instalación en el cliente" /><published>2021-01-08T18:00:00+01:00</published><updated>2021-01-08T18:00:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/08/mysql-instalar-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/08/mysql-instalar-cliente.html">&lt;h1 id=&quot;instalación-de-mysql-workbench-en-el-cliente&quot;&gt;Instalación de Mysql Workbench en el cliente&lt;/h1&gt;
+
+&lt;p&gt;Descarga la ova de Lbuntu Cliente de la carpeta compartida: https://drive.google.com/drive/u/2/folders/1zqUSboN6vQjZA0vaHR0ILJL7OhMv-czd&lt;/p&gt;
+
+&lt;p&gt;Importa la máquina en Virtualbox y configura el adaptador de red como &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Adaptador puente&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Inicia la máquina y accede con el usuario &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vagrant&lt;/code&gt; contraseña &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vagrant&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Descarga el repositorio de mysql.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;https://dev.mysql.com/downloads/repo/apt/&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Instala el repositorio de mysql mediante la instalación del paquete descargado.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo dpkg -i mysql-apt-config_0.8.16-1_all.deb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Actualiza los repositorios:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo apt update&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Instala Workbench:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo apt-get install mysql-workbench-community&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Inicia la aplicación &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;workbench&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_cliente/workbench.png&quot; alt=&quot;Workbench&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Configura una conexión nueva para conectarse al servidor&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_cliente/workbenchConfig.png&quot; alt=&quot;Workbench&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Verás que la conexión no funciona porque hay que modificar un archivo de configuración en el servidor.&lt;/p&gt;
+
+&lt;h1 id=&quot;configurar-mysql-para-que-acepte-conexiones-diferentes-a-localhost&quot;&gt;Configurar mysql para que acepte conexiones diferentes a localhost&lt;/h1&gt;
+
+&lt;p&gt;En el servidor.&lt;/p&gt;
+
+&lt;p&gt;Edita el fichero de configuración &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/mysql/mysql.conf.d/mysqld.cnf&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Edita la línea en la que aparece &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bind-address&lt;/code&gt; para que quede como en la imagen:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_cliente/bind.png&quot; alt=&quot;Workbench&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Reinicia el servicio de mysql&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo service mysql restart&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Prueba la conexión desde el cliente para ver si funciona.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Instalación de Mysql Workbench en el cliente</summary></entry><entry><title type="html">Mysql - Instalación en el servidor</title><link href="http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor.html" rel="alternate" type="text/html" title="Mysql - Instalación en el servidor" /><published>2021-01-07T20:12:00+01:00</published><updated>2021-01-07T20:12:00+01:00</updated><id>http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2021/01/07/mysql-instalar-servidor.html">&lt;h1 id=&quot;instalación-de-lamp-en-ubuntu-server&quot;&gt;Instalación de LAMP en Ubuntu Server&lt;/h1&gt;
 
 &lt;p&gt;Descarga la ova de Ubuntu Server de la carpeta compartida: https://drive.google.com/drive/u/2/folders/1zqUSboN6vQjZA0vaHR0ILJL7OhMv-czd&lt;/p&gt;
 
@@ -52,471 +1279,4 @@
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grant all privileges on *.* to 'phpmyadmin'@'%' with grant option;&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_servidor/phpmyadmin2.png&quot; alt=&quot;phpmyadmin&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Instalación de LAMP en Ubuntu Server</summary></entry><entry><title type="html">Reconfigurar las contraseñas de los usuarios</title><link href="http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords.html" rel="alternate" type="text/html" title="Reconfigurar las contraseñas de los usuarios" /><published>2020-10-12T10:50:00+02:00</published><updated>2020-10-12T10:50:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/12/reconfigurar-passwords.html">&lt;h1 id=&quot;reconfigurar-las-contraseñas-de-los-usuarios&quot;&gt;Reconfigurar las contraseñas de los usuarios&lt;/h1&gt;
-
-&lt;p&gt;En el servidor.&lt;/p&gt;
-
-&lt;p&gt;Abre un terminal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Simbolo del sistema&lt;/code&gt;. También puedes ejecutar el comando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmd&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reconfigurar_passwords/1.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ejecuta el comando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sqlplus /nolog&lt;/code&gt; para acceder a la base de datos sin utilizar credenciales. Esto lo podemos hacer porque nuestro usuario local es &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Administrador&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reconfigurar_passwords/2.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ejecuta el comando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;connect / as sysdba&lt;/code&gt; para alcanzar los privilegios más altos.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reconfigurar_passwords/3.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ahora modificamos la contraseña de los usuarios &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sys&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;system&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott&lt;/code&gt; y &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hr&lt;/code&gt;; utilizando los comandos:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;alter user sys identified by system;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;alter user system identified by system;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;alter user scott identified by tiger;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;alter user hr identified by hr;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reconfigurar_passwords/4.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;
-&lt;img src=&quot;/assets/reconfigurar_passwords/5.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;
-&lt;img src=&quot;/assets/reconfigurar_passwords/6.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;
-&lt;img src=&quot;/assets/reconfigurar_passwords/7.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Salimos de la conexión utilizando el comando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exit&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reconfigurar_passwords/8.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Accedemos al Enterprise Manager mediante el navegador.&lt;/p&gt;
-
-&lt;p&gt;Nos conectamos utilizando el usuario &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sys&lt;/code&gt; con la contraseña &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;system&lt;/code&gt; y como &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sysdba&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/reconfigurar_passwords/9.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;
-&lt;img src=&quot;/assets/reconfigurar_passwords/10.png&quot; alt=&quot;Reconfigurar passwords&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Reconfigurar las contraseñas de los usuarios</summary></entry><entry><title type="html">Crear Tablespace - Práctica guiada 1</title><link href="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html" rel="alternate" type="text/html" title="Crear Tablespace - Práctica guiada 1" /><published>2020-10-04T18:30:00+02:00</published><updated>2020-10-04T18:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/crear-tablespace.html">&lt;h1 id=&quot;crear-tablespace&quot;&gt;Crear Tablespace&lt;/h1&gt;
-
-&lt;p&gt;Desde el Enterprise Manager nos dirigimos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Servidor -&amp;gt; Almacenamiento -&amp;gt; Tablespaces&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/1.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Por defecto nos aparecen los tablespaces existentes. Pulsamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Crear&lt;/code&gt; para iniciar el proceso de creación de un nuevo tablespace.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/2.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Escribimos el nombre del nuevo tablespace &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TS1&lt;/code&gt;. El resto de opciones las dejamos por defecto. Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Agregar&lt;/code&gt; para crear un nuevo fichero asociado al tablespace.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/3.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Marcamos las siguientes opciones:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Nombre del Archivo: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TS1&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Tamaño del Archivo: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1MB&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Marcamos la casilla de verificación &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ampliar automáticamente ...&quot;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Incremento: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;512KB&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Tamaño máximo de Archivo: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5MB&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Continuar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/4.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt; para que las modificaciones sobre el fichero se hagan efectivas.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/5.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Obtenemos nuestro nuevo tablespace en la lista de tablespaces.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/crear_tablespace/6.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Crear Tablespace</summary></entry><entry><title type="html">Gestión directa de objetos</title><link href="http://localhost:4000/jekyll/update/2020/10/04/gestion-directa.html" rel="alternate" type="text/html" title="Gestión directa de objetos" /><published>2020-10-04T18:30:00+02:00</published><updated>2020-10-04T18:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/gestion-directa</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/gestion-directa.html">&lt;h1 id=&quot;gestión-directa-de-objetos&quot;&gt;Gestión directa de objetos&lt;/h1&gt;
-
-&lt;p&gt;Desde el Enterprise Manager nos dirigimos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Esquema -&amp;gt; Objetos de la Base de Datos -&amp;gt; Tablas&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/1.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Para ver las tablas del esquema &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott&lt;/code&gt; introducimos el nombre y le damos al botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ir&lt;/code&gt;. De esta forma obtenemos la lista con las tablas.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/2.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Seleccionamos la tabla &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DEPT&lt;/code&gt; y presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ver&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/3.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ahora podemos elegir en la lista de &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Acciones&lt;/code&gt; la opción &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ver Datos&lt;/code&gt;. Debemos presionar el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ir&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/4.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Observamos las filas de la tabla seleccionada, así como el SQL asociado a la acción que acabamos de realizar.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/5.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;crear-una-secuencia&quot;&gt;Crear una secuencia&lt;/h1&gt;
-
-&lt;p&gt;Desde el Enterprise Manager nos dirigimos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Esquema -&amp;gt; Objetos de la Base de Datos -&amp;gt; Secuencias&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/6.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Seleccionamos el esquema &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/7.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Elegimos el nombre de la secuencia &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;S1&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;El valor máximo lo ponemos como ilimitado.&lt;/p&gt;
-
-&lt;p&gt;Elegimos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Mostrar SQL&lt;/code&gt; para ver el código que se va a ejecutar.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/8.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Volver&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/9.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/gestion_directa/10.png&quot; alt=&quot;Crear tablespace&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Gestión directa de objetos</summary></entry><entry><title type="html">Conectarse desde el cliente con SQL Plus</title><link href="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html" rel="alternate" type="text/html" title="Conectarse desde el cliente con SQL Plus" /><published>2020-10-04T12:20:00+02:00</published><updated>2020-10-04T12:20:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/sqlplus-desde-cliente.html">&lt;h1 id=&quot;conexión-desde-el-cliente&quot;&gt;Conexión desde el cliente&lt;/h1&gt;
-
-&lt;p&gt;En user-name debemos poner &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scott@&quot;192.168.2.164/orcl.w2008&quot;&lt;/code&gt;.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Fíjate en las comillas dobles.&lt;/li&gt;
-  &lt;li&gt;Utiliza la ip de tu servidor.&lt;/li&gt;
-  &lt;li&gt;Pon el nombre del servicio tal y como lo hayas configurado &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;orcl.w2008&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_Plus_desde_cliente/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Conexión desde el cliente</summary></entry><entry><title type="html">Tema 1 - Ejercicios</title><link href="http://localhost:4000/jekyll/update/2020/10/04/ejercicios-tema1.html" rel="alternate" type="text/html" title="Tema 1 - Ejercicios" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/ejercicios-tema1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/ejercicios-tema1.html">&lt;h1 id=&quot;exercici-11&quot;&gt;Exercici 1.1&lt;/h1&gt;
-
-&lt;p&gt;Segueix aquestes instruccions:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Has de tindre una connexió al servidor des del SQL Developer (que està en la màquina real), concretament a l’usuari SCOTT.&lt;/li&gt;
-  &lt;li&gt;Des de la consola de l’Enterprise Manager finalitza aquesta sessió de Scott des del SQL Developer de la màquina real de forma immediata.&lt;/li&gt;
-  &lt;li&gt;Intenta fer alguna operació des del SQL Developer , per exemple SELECT * FROM DEPT;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Donarà un error. Escriu exactament l’error que dóna (el trobaràs en la barra d’estat del SQL Developer, en la part inferior).&lt;/p&gt;
-
-&lt;p&gt;Adjunta també una imatge on es puga veure aquest error.&lt;/p&gt;
-
-&lt;p&gt;La contestació i la imatge poden anar en un document de text Word o OpenOffice (o LibreOffice).&lt;/p&gt;
-
-&lt;h1 id=&quot;exercici-12&quot;&gt;Exercici 1.2&lt;/h1&gt;
-
-&lt;p&gt;Segueix aquestes instruccions:&lt;/p&gt;
-
-&lt;p&gt;No has de tindre una connexió des del SQL Developer. Si tens el SQL Developer en marxa, tanca’l.&lt;/p&gt;
-
-&lt;p&gt;Des de la consola de l’Enterprise Manager posa la instància en mode MOUNT. Per a fer això primer ha de parar la instància, i per tant et preguntarà pel mètode: has de triar Inmediato.&lt;/p&gt;
-
-&lt;p&gt;Quan estigues segur/a que la instància està en mode MOUNT, intenta connectar des de SQL Developer (a SCOTT). Si és precís, intenta-ho més d’una vegada. Com que la instància no està oberta, t’eixirà un error. Escriu exactament l’error que dóna.&lt;/p&gt;
-
-&lt;p&gt;Adjunta també una imatge on es puga veure aquest error.&lt;/p&gt;
-
-&lt;p&gt;La contestació i la imatge poden anar en un document de text Word o OpenOffice (o LibreOffice).&lt;/p&gt;
-
-&lt;p&gt;Posteriorment posa en mode OPEN (Abierta) la instància, per a poder continuar treballant.&lt;/p&gt;
-
-&lt;h1 id=&quot;exercici-13&quot;&gt;Exercici 1.3&lt;/h1&gt;
-
-&lt;p&gt;Apunta el nom i la grandària exacta del fitxer associat al Tablespace TS1 després de fer la Pràctica guiada 1. Ho pots consultar per mig de l’explorador de Windows.&lt;/p&gt;
-
-&lt;p&gt;Adjunta també una imatge on es puga veure el fitxer anterior des de l’explorador d’arxius de Windows.&lt;/p&gt;
-
-&lt;p&gt;La contestació i la imatge poden anar en un document de text Word o OpenOffice (o LibreOffice).&lt;/p&gt;
-
-&lt;h1 id=&quot;exercici-14&quot;&gt;Exercici 1.4&lt;/h1&gt;
-
-&lt;p&gt;Des de la consola de l’Enterprise Manager crea una vista en l’esquema de SCOTT anomenada DEPARTAMENTS que continga el nom dels departaments juntament amb el número d’empleats de cada departament (fins i tot d’aqueslls que no tenen empleats).&lt;/p&gt;
-
-&lt;p&gt;Pots practicar primer la sentència SQL des del SQL Developer, però la creació de la vista l’has de fer des de la consola de l’Enterprise Manager en la màquina virtual on està el servidor Oracle. Pot ser especialment útil l’opció Sustituir si existe, per si no t’ha eixit com volies a la primera.&lt;/p&gt;
-
-&lt;p&gt;La solució hauria de ser aquesta (observeu que el camp amb el número d’empleats té l’àlias NUM_EMP).&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/tema1_ejercicios/1.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Adjunta també una imatge on es puga veure la creació (amb la sentència SQL) de la vista, és a dir, immediatament abans de crear-la.&lt;/p&gt;
-
-&lt;p&gt;Pots pujar la imatge solta o en un document de text Word o OpenOffice (o LibreOffice), i posar els comentaris que estimes oportuns.&lt;/p&gt;
-
-&lt;h1 id=&quot;exercici-15&quot;&gt;Exercici 1.5&lt;/h1&gt;
-
-&lt;p&gt;Investiga els següents comandaments que es fan servir des de la consola o terminal:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;tnsping&lt;/li&gt;
-  &lt;li&gt;lsnrctl&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Fes-ne un resum de la seua utilitat i adjunta el resultat que mostren quan els executes en les teues màquines.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Exercici 1.1</summary></entry><entry><title type="html">Parar e iniciar la base de datos</title><link href="http://localhost:4000/jekyll/update/2020/10/04/parar-e-iniciar.html" rel="alternate" type="text/html" title="Parar e iniciar la base de datos" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/parar-e-iniciar</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/parar-e-iniciar.html">&lt;h1 id=&quot;parar-la-base-de-datos&quot;&gt;Parar la base de datos&lt;/h1&gt;
-
-&lt;p&gt;Accedemos al Enterprise Manager con &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sys&lt;/code&gt; como &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SYSDBA&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;En el apartado General presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cerrar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/2.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Debemos poner nuestras credenciales de Host:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Usuario: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Administrador&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Contraseña: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Hola01&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Y las credenciales de Base de  Datos:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Usuario: sys&lt;/li&gt;
-  &lt;li&gt;Contraseña: system&lt;/li&gt;
-  &lt;li&gt;Conectar como: SYSDBA&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Vamos a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Opciones Avanzadas&lt;/code&gt; para ver los modos en que podemos cerrar la base de datos.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Matenemos la opción de cierre inmediato y presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Aceptar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Confirmamos el cierre de la base de datos presionando &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Sí&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nos informa de que la base de datos se está cerrando. Podemos presionar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Refrescar&lt;/code&gt; para ver si cambia el estado de la base de datos.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/6.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Pasado un tiempo podemos ver que la instancia de la base de datos está cerrada.&lt;/p&gt;
-
-&lt;h1 id=&quot;iniciar-la-base-de-datos&quot;&gt;Iniciar la base de datos&lt;/h1&gt;
-
-&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Iniciar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Tenemos que volver a rellenar las credenciales necesarias para poder iniciar la base de datos.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Presionamos el botón &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Sí&lt;/code&gt; para comenzar el proceso.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/9.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Esperamos a que se complete la operación.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/10.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nos conectamos a la instancia con las credenciales necesarias.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/11.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ya tenemos nuestra base de datos en marcha.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/12.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;sga-y-pga&quot;&gt;SGA y PGA&lt;/h1&gt;
-
-&lt;p&gt;Podemos consultar la memoria dedicada a SGA y a PGA desde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Servidor-&amp;gt;Configuración de la Base de Datos-&amp;gt;Asesores de Memoria&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/13.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Pestaña SGA.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/14.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Pestaña PGA.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/15.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;parámetros-de-inicialización&quot;&gt;Parámetros de inicialización&lt;/h1&gt;
-
-&lt;p&gt;Podemos consultar los parámetros de inicialización desde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Servidor-&amp;gt;Configuración de la Base de Datos-&amp;gt;Parámetros de incialización&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/13.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
-&lt;img src=&quot;/assets/parar_e_iniciar/16.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;sesiones&quot;&gt;Sesiones&lt;/h1&gt;
-
-&lt;p&gt;Para localizar las sesiones activas tenemos que hacerlo desde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rendimiento-&amp;gt;Sesiones de Búsqueda&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/17.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Especificamos los criterios de búsqueda (SID) y presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ir&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/18.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nos aparecen las sesiones existentes.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/19.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Podríamos seleccionar la sesión de scott y &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Matar Sesión&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/parar_e_iniciar/20.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Parar la base de datos</summary></entry><entry><title type="html">Configurar el listener en el servidor</title><link href="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html" rel="alternate" type="text/html" title="Configurar el listener en el servidor" /><published>2020-10-04T11:30:00+02:00</published><updated>2020-10-04T11:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/04/w2008-configurar-listener.html">&lt;h1 id=&quot;configurar-el-listener-en-el-servidor&quot;&gt;Configurar el listener en el servidor&lt;/h1&gt;
-
-&lt;p&gt;Para poder conectarnos desde el cliente, debemos configurar el listener para que acepte peticiones que vayan dirigidas a la propia IP del servidor.&lt;/p&gt;
-
-&lt;p&gt;Hacemos esto conectándonos al Enterprise Manager con el usuario SYS. Desde la pantalla principal entramos en &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LISTENER_localhost&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/106.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Editamos el listener.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/107.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Agregamos una nueva dirección.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/108.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ponemos la IP del servidor y mantenemos el puerto por defecto.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/109.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ahora tenemos dos direcciones en el listener.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/110.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Confirmamos los cambios y listo.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/w2008_configurar_listener/111.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Configurar el listener en el servidor</summary></entry><entry><title type="html">SQL Developer - Crear nueva conexión</title><link href="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html" rel="alternate" type="text/html" title="SQL Developer - Crear nueva conexión" /><published>2020-10-03T19:45:00+02:00</published><updated>2020-10-03T19:45:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/sql-developer-nueva-conexion.html">&lt;h1 id=&quot;abrir-puertos-en-el-servidor&quot;&gt;Abrir puertos en el servidor&lt;/h1&gt;
-
-&lt;p&gt;Lo primero que se debe hacer es abrir los puertos adecuados en el servidor:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;1158&lt;/li&gt;
-  &lt;li&gt;1521&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/abrir_puertos.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Comprobamos que podemos acceder a la interfaz web del servidor desde el cliente.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Hay que utilizar el protocolo https.&lt;/li&gt;
-  &lt;li&gt;El puerto es el 1158&lt;/li&gt;
-  &lt;li&gt;Hay que aceptar las excepciones de seguridad pertinentes.&lt;/li&gt;
-  &lt;li&gt;En mi caso, la IP del servidor es 192.168.2.164&lt;/li&gt;
-  &lt;li&gt;La ruta completa para acceder es: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;https://192.168.2.164:1158/em&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;conexión-básica&quot;&gt;Conexión básica&lt;/h1&gt;
-
-&lt;p&gt;Vamos a crear una conexión básica desde SQL Developer&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
-&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Los parámetros necesarios en este caso son:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Nombre de la conexión: orcl.&lt;/li&gt;
-  &lt;li&gt;Usuario: scott.&lt;/li&gt;
-  &lt;li&gt;Contraseña: tiger.&lt;/li&gt;
-  &lt;li&gt;Tipo de conexión: Basic.&lt;/li&gt;
-  &lt;li&gt;Nombre del host: IP de tu servidor.&lt;/li&gt;
-  &lt;li&gt;Puerto: 1521 (ya está abierto en el servidor).&lt;/li&gt;
-  &lt;li&gt;Puerto: 1521 (ya está abierto en el servidor).&lt;/li&gt;
-  &lt;li&gt;SID: orcl&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Presionamos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Probar&lt;/code&gt; y nos conectamos.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/6.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;conexión-tns&quot;&gt;Conexión TNS&lt;/h1&gt;
-
-&lt;p&gt;Abrimos el Asistente de Configuración de Red.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Seleccionamos la tercera opción.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Añadimos un nuevo nombre de servicio en red.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/9.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Especificamos el mismo nombre del servicio que tenemos configurado en el servidor: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;orcl.w2008&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/10.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Elegimos el tipo de protocolo.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/11.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Escribimos la dirección IP de nuestro servidor y dejamos el puerto por defecto.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/12.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Realizamos un test para comprobar que la conexión se realiza correctamente.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/13.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
-&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/14.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Le damos el nombre &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;orcl&lt;/code&gt; al servicio.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/15.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Y finalizamos el proceso.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/16.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
-&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/17.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;crear-nueva-conexión-con-tns&quot;&gt;Crear nueva conexión con TNS&lt;/h2&gt;
-
-&lt;p&gt;Ahora podemos crear una nueva conexión utilizando la configuración que acabamos de generar.&lt;/p&gt;
-
-&lt;p&gt;Abrimos SQL Developer y creamos una nueva conexión.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/18.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ponemos los datos del usuario scott y en Tipo de Conexión elegimos &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TNS&lt;/code&gt;. Probamos la conexión y listo.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/19.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Ahora tenemos dos conexiones:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;La primera utiliza el tipo de conexión básica.&lt;/li&gt;
-  &lt;li&gt;La segunda utiliza la conexión de tipo TNS.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_nueva_conexion/20.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Abrir puertos en el servidor</summary></entry><entry><title type="html">Abrir SQL Developer y corregir error</title><link href="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html" rel="alternate" type="text/html" title="Abrir SQL Developer y corregir error" /><published>2020-10-03T19:30:00+02:00</published><updated>2020-10-03T19:30:00+02:00</updated><id>http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/10/03/abrir-sql-developer-y-corregir-error.html">&lt;h1 id=&quot;abrir-sql-developer&quot;&gt;Abrir SQL Developer&lt;/h1&gt;
-
-&lt;p&gt;Abrimos SQL Developer desde el menú principal de Windows.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/1.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Debemos indicarle la ubicación de “java”.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/2.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;En mi caso la ubicación está en el directorio:&lt;br /&gt;
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C:\app\alumno\product\11.2.0\client_1\jdk\bin&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/3.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Podemos marcar las extensiones de ficheros que abrirá por defecto SQL Developer.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/4.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;En mi caso al abrirlo no hay forma de añadir una nueva conexión.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/5.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Además aparece un error..
-&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/error.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;corregir-error&quot;&gt;Corregir error&lt;/h1&gt;
-
-&lt;p&gt;Después de investigar un poco &lt;a href=&quot;https://community.oracle.com/tech/developers/discussion/874529/missing-connection-panel-version-1-5-4-5940&quot;&gt;aquí&lt;/a&gt;, damos con la solución.&lt;/p&gt;
-
-&lt;p&gt;Lo que tenemos que hacer es editar el fichero de configuración &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sqldeveloper.conf&lt;/code&gt; que en mi caso está en la ruta &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C:\app\alumno\product\11.2.0\client_1\sqldeveloper\sqldeveloper\bin&lt;/code&gt;. La edición se tiene que hacer como Administrador. Debemos añadir al final del fichero las siguientes líneas.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;AddVMOption -Duser.country=ES
-AddVMOption -Duser.territory=ES
-AddVMOption -Duser.language=es
-AddVMOption -Duser.timezone=+01:00
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/7.png&quot; alt=&quot;Máquina limpia&quot; /&gt;
-&lt;img src=&quot;/assets/SQL_developer_y_corregir_error/8.png&quot; alt=&quot;Máquina limpia&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Vuelve a arrancar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SQL Developer&lt;/code&gt; y listo.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Abrir SQL Developer</summary></entry></feed>
+&lt;p&gt;&lt;img src=&quot;/assets/mysql_instalar_servidor/phpmyadmin2.png&quot; alt=&quot;phpmyadmin&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Instalación de LAMP en Ubuntu Server</summary></entry></feed>

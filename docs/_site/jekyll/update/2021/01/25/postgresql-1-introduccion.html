@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>PostgreSQL - Introducción | ASGBD</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="PostgreSQL - Introducción" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tema 7 - PostgreSQL - Introducción" />
+<meta property="og:description" content="Tema 7 - PostgreSQL - Introducción" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2021/01/25/postgresql-1-introduccion.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2021/01/25/postgresql-1-introduccion.html" />
+<meta property="og:site_name" content="ASGBD" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-25T08:22:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2021/01/25/postgresql-1-introduccion.html","headline":"PostgreSQL - Introducción","dateModified":"2021-01-25T08:22:00+01:00","datePublished":"2021-01-25T08:22:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2021/01/25/postgresql-1-introduccion.html"},"description":"Tema 7 - PostgreSQL - Introducción","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ASGBD" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ASGBD</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PostgreSQL - Introducción</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-01-25T08:22:00+01:00" itemprop="datePublished">Jan 25, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="tema-7---postgresql---introducción">Tema 7 - PostgreSQL - Introducción</h1>
+
+<h2 id="objetivos">Objetivos</h2>
+
+<p>Una vez que ya sabemos cuál es el trabajo de administrar una gran base de datos como Oracle, vamos a aplicarlo a otro Sistema Gestor de Bases de Datos: <strong>PostgreSQL</strong>.</p>
+
+<p>Hemos elegido PostgreSQL por su potencia y fiabilidad, y por otra característica muy importante: es software libre, así habremos visto a lo largo del curso dos sistemas gestores de bases de
+datos muy potentes: <strong>Oracle</strong> (como sistema propietario) y <strong>PostgreSQL</strong> (como software libre).</p>
+
+<p>Los objetivos de este tema básicamente serán:</p>
+<ul>
+  <li>Instalar el sistema gestor.</li>
+  <li>Arrancar y parar el servidor.</li>
+  <li>Crear usuarios que puedan conectar al servidor con diferentes privilegios.</li>
+  <li>Gestionar las Bases de Datos.</li>
+  <li>Hacer copias de seguridad, y saber recuperar los datos en caso de necesidad.</li>
+</ul>
+
+<h2 id="conocimientos-previos">Conocimientos previos</h2>
+
+<p>En este tema instalaremos PostgreSQL sobre Linux (aunque también se puede hacer sobre Windows u otros sistemas operativos). Se puede instalar sobre cualquier versión de Linux aunque nosotros preferentemente utilizaremos <strong>Ubuntu Server 20.04</strong>, esta máquina virtual se puede descargar desde el drive del módulo.</p>
+
+<p>Las credenciales para acceder a ella son:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usuario: vagrant 
+Contraseña: vagrant
+</code></pre></div></div>
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Definido de forma rápida, PostgreSQL es un SGBD Relacional que incorpora conceptos de objetos.</p>
+
+<p>Al ser un SGBD relacional, significa que soporta perfectamente la integridad referencial, las restricciones, disparadores o triggers, transacciones, etc. Además ofrece soporte prácticamente total al estandar SQL 92 / SQL 3.</p>
+
+<p>Intenta ser muy flexible permitiendo tipos de datos nuevos creados por el usuario, operadores nuevos, etc.</p>
+
+<p>Y sobretodo, incorpora también conceptos de BD orientadas a objetos. No es un SGBD completamente orientado a objetos, sino que incorpora algunos conceptos como la herencia y las clases.</p>
+
+<p>El origen de PostgreSQL fue un proyecto de la Universidad de Berkeley. El nombre de Postgres se creó en 1986. En 1987 se lanzó la primera versión que fue mejorando hasta llegar a la versión 4.
+En 1994 se lanzó un “descendiente” de Postgres de dominio público y código abierto que e denominó <strong>Postgre95</strong>. Este nombre no podía tener futuro y en 1996 se cambió a PostgreSQL. La primera
+versión de PostgreSQL fue la 6.0 para continuar con la secuencia del proyecto original de la Universidad.</p>
+
+<p>En Linux, o mejor dicho, en el mundo del software libre, e utilizan principalmente dos SGBD: <strong>MySQL y PostgreSQL</strong></p>
+
+<ul>
+  <li>En <strong>MySQL</strong> se intenta, por encima de todo, que sea muy rápido y que gaste pocos recursos. Para conseguir esto incluso sacrifica (en algunos casos) cosas impensables como la integridad referencial, transacciones, etc. MySQL se ha impuesto en la creación de páginas web (junto con Apache, PHP y Perl) donde se busca sobretodo la velocidad.</li>
+  <li><strong>PostgreSQL</strong> se puede definir como “más serio”, y aunque no llega a ser tan rápido como MySQL puede ser perfectamente un SGBD para sitios o empresas realmente grandes y que necesiten entornos seguros.</li>
+</ul>
+
+<p>Existen muchas comparativas en Internet de SGBDs, y normalmente, la conclusión no es que uno sea mejor que otro, sino que depende de lo que se quiera hacer. ¿Qué necesitamos, velocidad o
+potencia?</p>
+
+<h2 id="instalación-del-servidor">Instalación del servidor</h2>
+
+<p>PostgreSQL se puede instalar en diversos sistemas operativos (Linux, Windows, OS). En estos apuntes veremos la instalación en Linux, concretamente en la máquina virtual Ubuntu Server 20.04.</p>
+
+<p>En Linux existen varias formas de instalar PostgreSQL, por  paquetes, descargando el código fuente, etc.</p>
+
+<p>Los repositorios por defecto de Ubuntu contienen paquetes Postgres, así que podemos instalarlo fácilmente utilizando <code class="language-plaintext highlighter-rouge">apt</code>. Si realizamos la instalación de esta forma no tendremos la última versión del sistema gestor.</p>
+
+<p>A continuación tienes los comandos para instalar postgres desde el terminal:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
+</code></pre></div></div>
+
+<p>El procedimiento de instalación creó un usuario llamado postgres, para poder conectar al servidor debemos cambiar a la cuenta postgres</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -i -u postgres
+</code></pre></div></div>
+
+<p>Ahora ya se puede acceder a la consola de postgres</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psql
+</code></pre></div></div>
+
+<p>También se puede acceder directamente a la consola de postgres con el siguiente comando:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -u postgres psql
+</code></pre></div></div>
+
+<p>A continuación se muestra un vídeo donde se puede ver una forma sencilla de instalar PostgreSQL. Este vídeo sería útil si en el servidor se tiene interfaz gráfica y se desea realizar la instalación haciendo uso de la misma. NO DEBES SEGUIR EL VÍDEO.</p>
+
+<p><a href="https://www.youtube.com/watch?v=SWUzgFPR1-E">Instalación de PostgreSQL en Ubuntu Mate 16.04</a></p>
+
+<p>Durante el proceso de instalación se ha creado un usuario <strong>postgres</strong> que será el propietario de todo PostgreSQL.</p>
+
+<p>De momento, en la base de datos sólo existe un usuario que también se llama <strong>postgres</strong> que será el DBA.</p>
+
+<h2 id="instalación-del-cliente">Instalación del cliente</h2>
+
+<p>El cliente oficial de Postgres es <strong>pgAdmin</strong>. El cliente recomendado es pgadmin4.</p>
+
+<h3 id="cliente-windows">Cliente Windows</h3>
+
+<p>A continuación tienes un vídeo donde puedes ver la instalación de pgAdmin en Windows. Sigue este vídeo si deseas utilizar como cliente una máquina real o virtual con Windows.</p>
+
+<p><a href="https://youtu.be/rvQaphk4gCw">Instalar pgAdmin4 en Windows</a></p>
+
+<h3 id="cliente-linux">Cliente Linux</h3>
+
+<p>Sigue estos pasos para utilizar como cliente una máquina real o virtual con Linux. Puedes utilizar el Lubuntu 20.04 del tema anterior.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
+
+sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" &gt; /etc/apt/sources.list.d/pgadmin4.list &amp;&amp; apt update'
+
+sudo apt install pgadmin4
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/jekyll/update/2021/01/25/postgresql-1-introduccion.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">ASGBD</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">ASGBD</li><li><a class="u-email" href="mailto:xulioxesus@gmail.com">xulioxesus@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">xulioxesus</span></a></li><li><a href="https://www.twitter.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">xulioxesus</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Apuntes de Administración de sistemas gestores e bases de datos.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

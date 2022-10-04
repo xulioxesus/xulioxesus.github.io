@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>PostgreSQL - Ficheros de configuración | ASGBD</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="PostgreSQL - Ficheros de configuración" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tema 7 - PostgreSQL - Ficheros de configuración" />
+<meta property="og:description" content="Tema 7 - PostgreSQL - Ficheros de configuración" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion.html" />
+<meta property="og:site_name" content="ASGBD" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-26T06:35:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion.html","headline":"PostgreSQL - Ficheros de configuración","dateModified":"2021-01-26T06:35:00+01:00","datePublished":"2021-01-26T06:35:00+01:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion.html"},"description":"Tema 7 - PostgreSQL - Ficheros de configuración","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ASGBD" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ASGBD</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">PostgreSQL - Ficheros de configuración</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-01-26T06:35:00+01:00" itemprop="datePublished">Jan 26, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="tema-7---postgresql---ficheros-de-configuración">Tema 7 - PostgreSQL - Ficheros de configuración</h1>
+
+<h2 id="ficheros-de-configuración">Ficheros de configuración</h2>
+
+<p>Básicamente son tres los ficheros de configuración de PostgreSQL. En nuestra instalación estos ficheros se encuentran en</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/postgres/12/main
+</code></pre></div></div>
+
+<ul>
+  <li><strong>postgresql.conf:</strong> En este fichero se encuentran la mayor parte de los parámetros de configuración del servidor.</li>
+  <li><strong>pg_hba.conf:</strong> Desde aquí se pueden controlar las conexiones al servidor. Podemos permitir o denegar las conexiones desde determinadas IPs, de usuarios, etc</li>
+  <li><strong>pg_ident.conf:</strong> Se combina con el fichero anterior para controlar el acceso al servidor. Nosotros no lo vamos a utilizar.</li>
+</ul>
+
+<p>Para poder editar estos ficheros, no tendremos ningún problema en el caso de Windows, pero si tenemos el servidor en una máquina de Linux, tendremos que hacerlo desde un usuario con permisos.
+Tendremos que conectar como superusuario (sudo su), y después, o bien utilizar un editor como <strong>nano</strong> o <strong>vi</strong>.</p>
+
+<p><strong>NOTA:</strong> Si después de modificar algún fichero de configuración, éste tiene algún error (es
+sintácticamente incorrecto) PostgreSQL no podrá arrancar de nuevo. Por esta razón es <strong>MUY IMPORTANTE</strong> hacer una <strong>copia de seguridad</strong> de los ficheros de configuración <strong>ANTES</strong> de realizar
+cualquier cambio.</p>
+
+<h2 id="postgresqlconf">postgresql.conf</h2>
+
+<p>Vamos a ver algunos parámetros de este fichero. Los parámetros que llevan delante <strong>#</strong> están comentados y por lo tanto se toma el valor por defecto. Cuando modificamos algún parámetro de los
+ficheros de configuración, como mínimo tendremos que hacer un <strong>RELOAD</strong> del servidor aunque en algunos casos no será suficiente y tendremos que hacer un <strong>RESTART</strong>.</p>
+
+<p>Algunos parámetros y sus descripciones son:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">hba_file</code>, lugar donde se encuentra el fichero pg_hba.conf.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ident_file</code>, lugar donde se encuentra el fichero pg_ident.conf.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">listen_addresses</code>, lista de IPs desde las que se admiten conexiones.</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">localhost</code>, ólo admite conexiones locales (por defecto).</li>
+      <li><code class="language-plaintext highlighter-rouge">*</code>, permite conexiones desde cualquier IP.</li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">port</code>, puerto de escucha del servidor (por defecto 5432).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">max_connections</code>, número máximo de conexiones (excepto para DBA).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">superuser_reserved_connections</code>, número de conexiones reservadas para el DBA; así pues, el máximo de conexiones para el resto de usuarios es: <code class="language-plaintext highlighter-rouge">max_connections - superuser_reserved_connections</code>.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">authentication_timeout</code>, tiempo máximo para autenticar a un usuario.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ssl</code>, habilita las conexiones ssl (por defecto off).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">password_encryption</code> determina si la contraseña está encriptada (por defecto on).</p>
+  </li>
+</ul>
+
+<p>Es de especial importancia el parámetro <code class="language-plaintext highlighter-rouge">listen_addresses</code>, que marca los lugares desde donde nos podemos conectar al servidor.</p>
+
+<p>La opción <code class="language-plaintext highlighter-rouge">localhost</code> únicamente permite conexiones desde el propio servidor mientras que la opción asterisco permite las conexiones desde cualquier dirección IP.</p>
+
+<h2 id="pg_hbaconf">pg_hba.conf</h2>
+
+<p>Este fichero de configuración guarda los usuarios que se pueden conectar al servidor, a qué bases de datos se pueden conectar, el tipo de autenticación, etc. Vamos a verlo con más detalle.</p>
+
+<p>En cada línea del fichero hay una serie de campos:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tipo de conexión =&gt; Base de Datos =&gt; Usuario =&gt; Dirección IP =&gt; Máscara IP =&gt; Método autenticación
+</code></pre></div></div>
+
+<h3 id="tipo-de-conexión">Tipo de conexión</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">LOCAL</code>, la conexión se realiza desde la misma máquina donde está el servidor. Se realiza utilizando sockets Unix. Además del usuario de BD, también será necesario el usuario del SO que es quien realiza la solicitud de conexión.</li>
+  <li><code class="language-plaintext highlighter-rouge">HOST</code>, indica conexiones externas por TCP/IP. Para poder habilitar este tipo de conexiones tenemos que asegurarnos que en el fichero postgresql.conf haya un asterisco para el parámetro <code class="language-plaintext highlighter-rouge">listen_addresses</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">HOSTSSL</code>, para conexiones que utilizan SSL sobre TCP/IP.</li>
+  <li><code class="language-plaintext highlighter-rouge">HOSTNOSSL</code>, para conexiones que no utilizan SSL sobre TCP/IP.</li>
+</ul>
+
+<p>La conexión LOCAL utiliza sockets Unix, por lo tanto no estará disponible en Windows.</p>
+
+<h3 id="base-de-datos">Base de Datos</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ALL</code>, se permite conectar a todas las Bases de Datos.</li>
+  <li><code class="language-plaintext highlighter-rouge">SAMEUSER</code>, se refiere a la Base de Datos con el mismo nombre de usuario.</li>
+  <li><code class="language-plaintext highlighter-rouge">SAMEROLE</code>, se refiere a la Base de Datos con el mismo nombre que un rol de grupo al que pertenece el usuario. También se puede utilizar el sinónimo <code class="language-plaintext highlighter-rouge">SAMEGROUP</code>.</li>
+</ul>
+
+<h3 id="usuario">Usuario</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ALL</code>, se refiere a todos los usuarios.</li>
+</ul>
+
+<p>Si no es ALL, se interpretará como el nombre de un usuario, o más de uno separado por comas.</p>
+
+<h3 id="dirección-y-máscara-ip">Dirección y Máscara IP</h3>
+
+<p>Con estos dos datos (dirección IP y máscara de red) podemos especificar las direcciones IP que pueden conectarse al servidor. Se puede indicar una sola dirección IP o un rango de direcciones IP.</p>
+
+<p>La máscara se puede indicar de la forma tradicional (por ejemplo: 255.255.255.0) o también con el prefijo (por ejemplo: /24).</p>
+
+<p>Para indicar una sola dirección IP escribiremos la dirección IP con máscara 32. Por ejemplo para la dirección 192.168.1.23 escribiremos una de las dos opciones:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>192.168.1.23 255.255.255.255
+192.168.1.23/32
+</code></pre></div></div>
+
+<p>Para indicar un rango de direcciones utilizaremos la direción de red y la máscara
+correspondiente. Por ejemplo para cualquier equipo de la red 10.0.0.0/8 escribiremos una de las dos
+opciones:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10.0.0.0 255.0.0.0
+10.0.0.0/8
+</code></pre></div></div>
+
+<h3 id="método-de-autenticación">Método de autenticación</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">TRUST</code>, la conexión siempre se acepta sin realizar ninguna comprobación, sin proporcionar contraseña.</li>
+  <li><code class="language-plaintext highlighter-rouge">REJECT</code>, la conexión siempre se rechaza.</li>
+  <li><code class="language-plaintext highlighter-rouge">PASSWORD</code>, obliga al cliente a proporcionar una contraseña. Estas contraseñas viajan por la red en texto plano y son fácilmente atacadas.</li>
+  <li><code class="language-plaintext highlighter-rouge">MD5</code>, igual que el anterior pero la contraseña viaja cifrada por MD5.</li>
+  <li><code class="language-plaintext highlighter-rouge">IDENT</code>, el usuario del SO y de PostgreSQL tienen que ser idénticos.</li>
+</ul>
+
+<h3 id="ejemplos">Ejemplos</h3>
+
+<p>Aquí tienes algunos ejemplos de líneas que se pueden poner en el fichero <strong>pg_hba.conf</strong> y su
+explicación:</p>
+
+<p><img src="/assets/asgbdTema7/ejemplos.png" alt="ejemplos" /></p>
+
+<p>Línea 82: permite la conexión desde el servidor a cualquier usuario a cualquier BD con contraseña.</p>
+
+<p>Línea 83: permite la conexión desde la IP 192.168.1.26 al usuario postgres a la BD postgres con contraseña.</p>
+
+<p>Línea 84: permite la conexión desde cualquier IP al usuario user1 a la BD user1 con contraseña.</p>
+
+<h2 id="iniciar-y-parar-el-servidor">Iniciar y parar el servidor</h2>
+
+<p>Existen varias formas de iniciar y parar el servidor.</p>
+
+<h3 id="automática">Automática</h3>
+
+<p>La mayor parte de las veces, tanto la puesta en marcha como la parada del servidor se realiza de forma automática cuando arrancamos o paramos el servidor.</p>
+
+<h3 id="comandos-del-sistema-operativo">Comandos del Sistema Operativo</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service postgresql-10 status
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">start</code>, inicia el servidor</li>
+  <li><code class="language-plaintext highlighter-rouge">stop</code>, para el servidor</li>
+  <li><code class="language-plaintext highlighter-rouge">restart</code>, reinicia el servidor (lo para y lo vuelve a iniciar)</li>
+  <li><code class="language-plaintext highlighter-rouge">status</code>, muestra información del estado del servidor</li>
+</ul>
+
+<h3 id="utilizando-pg_ctl">Utilizando pg_ctl</h3>
+
+<p>Es un script que se encuentra junto a todos los ejecutables de PostgreSQL (en la carpeta bin).</p>
+
+<p>Además de las opciones anteriores (start, stop, …) se pueden añadir más opciones como la ubicación de la BD, la forma de parar, el número máximo de conexiones, etc.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-D</code>, indica la carpeta donde se ubica la BD</li>
+  <li><code class="language-plaintext highlighter-rouge">-m</code>, indica la forma de parar la BD
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">s</code> (smart) espera a que todos los usuarios estén desconectados</li>
+      <li><code class="language-plaintext highlighter-rouge">f</code> (fast) descarta las transacciones, desconecta a los usuarios y apaga el servidor</li>
+      <li><code class="language-plaintext highlighter-rouge">i</code> (inmediate) para el servidor de forma inmediata. Después se tendrá que recuperar la BD.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="ejemplos-de-uso">Ejemplos de uso</h4>
+
+<p>Cambiamos al usuario postgres</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -u postgres
+</code></pre></div></div>
+
+<p>Nos movemos a la carpeta de instalación donde se encuentran los ejecutables</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /usr/lib/postgresql/12/bin
+</code></pre></div></div>
+
+<p>Reiniciamos la BD que está en la carpeta data</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_ctl -D data restart
+</code></pre></div></div>
+
+<p>Paramos la BD que está en data desconectando usuarios.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_ctl -D data -m s stop
+</code></pre></div></div>
+
+<p>Iniciamos la BD que está en la carpeta data</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pg_ctl -D data start
+</code></pre></div></div>
+
+<h2 id="ejercicios">Ejercicios</h2>
+
+<p>Realiza los siguientes ejercicios y adjunta las capturas de pantalla necesarias.</p>
+
+<h3 id="ejercicio-74">Ejercicio 7.4</h3>
+
+<p>Modifica el fichero <strong>pg_hba.conf</strong> para permitir conectar con el usuario <strong>postgres</strong> desde el equipo cliente a cualquier base de datos.</p>
+
+<h3 id="ejercicio-75">Ejercicio 7.5</h3>
+
+<p>Modifica el fichero <strong>pg_hba.conf</strong> para permitir conectar con el usuario <strong>geo</strong> desde cualquier IP de la red local a la base de datos <strong>geo</strong>.</p>
+
+<h3 id="ejercicio-76">Ejercicio 7.6</h3>
+
+<p>Desde el cliente abre una conexión con <strong>geo</strong>. Ahora desde el servidor intenta parar la Base de Datos utilizando el script <strong>pg_ctl</strong> con la opción <strong>s</strong>. Observa el resultado. Si has podido parar la Base de Datos recuerda ponerla en marcha con cualquiera de los métodos vistos en los apuntes.</p>
+
+  </div><a class="u-url" href="/jekyll/update/2021/01/26/postgresql-3-ficheros-de-configuracion.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">ASGBD</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">ASGBD</li><li><a class="u-email" href="mailto:xulioxesus@gmail.com">xulioxesus@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">xulioxesus</span></a></li><li><a href="https://www.twitter.com/xulioxesus"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">xulioxesus</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Apuntes de Administración de sistemas gestores e bases de datos.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
